@@ -738,4 +738,7 @@ public interface ApiApi {
 
     }
 
+    ResponseEntity<Correspondent> getCorrespondentById(Long id);
+
+    ResponseEntity<Document> getDocumentById(Long id);
 }

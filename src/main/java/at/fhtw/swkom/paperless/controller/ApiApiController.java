@@ -1,37 +1,17 @@
 package at.fhtw.swkom.paperless.controller;
 
+import at.fhtw.swkom.paperless.FakeDataProvider;
 import at.fhtw.swkom.paperless.services.dto.Correspondent;
-import org.springframework.format.annotation.DateTimeFormat;
-import at.fhtw.swkom.paperless.services.dto.DocTag;
 import at.fhtw.swkom.paperless.services.dto.Document;
-import at.fhtw.swkom.paperless.services.dto.DocumentType;
-import at.fhtw.swkom.paperless.services.dto.NewCorrespondent;
-import at.fhtw.swkom.paperless.services.dto.NewDocumentType;
-import at.fhtw.swkom.paperless.services.dto.NewTag;
-import java.time.OffsetDateTime;
-import at.fhtw.swkom.paperless.services.dto.UserInfo;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
@@ -40,16 +20,29 @@ import jakarta.annotation.Generated;
 @RequestMapping("${openapi.mockServer.base-path:}")
 public class ApiApiController implements ApiApi {
 
-    private final NativeWebRequest request;
+    private final FakeDataProvider fakeDataProvider;
 
     @Autowired
-    public ApiApiController(NativeWebRequest request) {
-        this.request = request;
+    public ApiApiController(FakeDataProvider fakeDataProvider) {
+        this.fakeDataProvider = fakeDataProvider;
     }
 
     @Override
     public Optional<NativeWebRequest> getRequest() {
-        return Optional.ofNullable(request);
+        return Optional.empty();
     }
 
+    @Override
+    public ResponseEntity<Correspondent> getCorrespondentById(Long id) {
+        // Use the FakeDataProvider to generate a fake Correspondent
+        Correspondent fakeCorrespondent = fakeDataProvider.getFakeCorrespondent();
+        return new ResponseEntity<>(fakeCorrespondent, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Document> getDocumentById(Long id) {
+        // Use the FakeDataProvider to generate a fake Document
+        Document fakeDocument = fakeDataProvider.getFakeDocument();
+        return new ResponseEntity<>(fakeDocument, HttpStatus.OK);
+    }
 }
