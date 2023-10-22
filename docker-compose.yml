@@ -1,0 +1,9 @@
+services:
+  paperless-rest:
+    container_name: paperless-rest-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: paperless-rest-server:latest
+    ports:
+      - 8081:8080

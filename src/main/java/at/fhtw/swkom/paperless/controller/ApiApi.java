@@ -504,7 +504,7 @@ public interface ApiApi {
     default ResponseEntity<Void> getTags(
         
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
