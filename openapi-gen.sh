@@ -10,11 +10,11 @@ docker run \
   -g spring \
   -p pocoModels=true \
   -p useSeperateModelProject=true \
-  --package-name at.fhtw.swkom.paperless \
-  --api-package at.fhtw.swkom.paperless.controller \
-  --model-package at.fhtw.swkom.paperless.services.dto \
-  --additional-properties configPackage=at.fhtw.swkom.paperless.config \
-  --additional-properties basePackage=at.fhtw.swkom.paperless.services \
+  --package-name at.fhtw.swen3.paperless \
+  --api-package at.fhtw.swen3.paperless.controller \
+  --model-package at.fhtw.swen3.paperless.services.dto \
+  --additional-properties configPackage=at.fhtw.swen3.paperless.config \
+  --additional-properties basePackage=at.fhtw.swen3.paperless.services \
   --additional-properties useSpringBoot3=true \
   --additional-properties requestMappingMode=controller \
   --additional-properties useSpringController=true \
