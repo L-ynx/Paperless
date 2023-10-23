@@ -23,7 +23,7 @@ import jakarta.annotation.Generated;
  * Correspondent
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-17T11:29:20.935609Z[Etc/UTC]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-23T11:25:43.450871Z[Etc/UTC]")
 public class Correspondent {
 
   private Long id;

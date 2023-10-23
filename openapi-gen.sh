@@ -6,7 +6,7 @@ docker run \
   --name openapi-gen \
   -v ${PWD}:/local \
   openapitools/openapi-generator-cli generate \
-  -i /local/swagger.json \
+  -i /local/openapi.yaml \
   -g spring \
   -p pocoModels=true \
   -p useSeperateModelProject=true \
@@ -16,7 +16,9 @@ docker run \
   --additional-properties configPackage=at.fhtw.swkom.paperless.config \
   --additional-properties basePackage=at.fhtw.swkom.paperless.services \
   --additional-properties useSpringBoot3=true \
-  --additional-properties useJakartaEe=true \
+  --additional-properties requestMappingMode=controller \
+  --additional-properties useSpringController=true \
+  --additional-properties useTags=true \
   -o /tmp/out/
 
 docker cp openapi-gen:/tmp/out/ ./out/
