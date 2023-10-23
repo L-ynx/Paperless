@@ -1,6 +1,6 @@
-package at.fhtw.swkom.paperless.controller;
+package at.fhtw.swen3.paperless.controller;
 
-import at.fhtw.swkom.paperless.services.dto.*;
+import at.fhtw.swen3.paperless.services.dto.*;
 import jakarta.annotation.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
