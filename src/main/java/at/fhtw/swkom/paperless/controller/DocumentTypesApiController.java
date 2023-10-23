@@ -1,15 +1,10 @@
 package at.fhtw.swkom.paperless.controller;
 
-import at.fhtw.swkom.paperless.services.dto.Correspondent;
-import org.springframework.format.annotation.DateTimeFormat;
-import at.fhtw.swkom.paperless.services.dto.DocTag;
-import at.fhtw.swkom.paperless.services.dto.Document;
-import at.fhtw.swkom.paperless.services.dto.DocumentType;
-import at.fhtw.swkom.paperless.services.dto.NewCorrespondent;
-import at.fhtw.swkom.paperless.services.dto.NewDocumentType;
-import at.fhtw.swkom.paperless.services.dto.NewTag;
-import java.time.OffsetDateTime;
-import at.fhtw.swkom.paperless.services.dto.UserInfo;
+import at.fhtw.swkom.paperless.services.dto.CreateDocumentType200Response;
+import at.fhtw.swkom.paperless.services.dto.CreateDocumentTypeRequest;
+import at.fhtw.swkom.paperless.services.dto.GetDocumentTypes200Response;
+import at.fhtw.swkom.paperless.services.dto.UpdateDocumentType200Response;
+import at.fhtw.swkom.paperless.services.dto.UpdateDocumentTypeRequest;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +30,15 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-17T11:29:20.935609Z[Etc/UTC]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-23T11:25:43.450871Z[Etc/UTC]")
 @Controller
-@RequestMapping("${openapi.mockServer.base-path:}")
-public class ApiApiController implements ApiApi {
+@RequestMapping("${openapi.paperlessRestServer.base-path:}")
+public class DocumentTypesApiController implements DocumentTypesApi {
 
     private final NativeWebRequest request;
 
     @Autowired
-    public ApiApiController(NativeWebRequest request) {
+    public DocumentTypesApiController(NativeWebRequest request) {
         this.request = request;
     }
 
