@@ -5,9 +5,14 @@
  */
 package at.fhtw.swen3.paperless.controller;
 
+import at.fhtw.swen3.paperless.services.dto.CreateSavedViewsRequest;
 import at.fhtw.swen3.paperless.services.dto.CreateStoragePath200Response;
 import at.fhtw.swen3.paperless.services.dto.CreateStoragePathRequest;
+import at.fhtw.swen3.paperless.services.dto.CreateUISettings200Response;
+import at.fhtw.swen3.paperless.services.dto.CreateUISettingsRequest;
+import at.fhtw.swen3.paperless.services.dto.GetSavedViews200Response;
 import at.fhtw.swen3.paperless.services.dto.GetStoragePaths200Response;
+import at.fhtw.swen3.paperless.services.dto.GetUISettings200Response;
 import at.fhtw.swen3.paperless.services.dto.UpdateStoragePath200Response;
 import at.fhtw.swen3.paperless.services.dto.UpdateStoragePathRequest;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
@@ -37,7 +42,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-23T14:33:06.577219Z[Etc/UTC]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-29T23:17:16.529780Z[Etc/UTC]")
 @Validated
 @Controller
 @Tag(name = "Config", description = "the Config API")
@@ -46,6 +51,33 @@ public interface ConfigApi {
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
     }
+
+    /**
+     * POST /api/saved_views
+     *
+     * @param createSavedViewsRequest  (optional)
+     * @return Success (status code 200)
+     */
+    @Operation(
+        operationId = "createSavedViews",
+        tags = { "Config" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/api/saved_views",
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<Void> createSavedViews(
+        @Parameter(name = "CreateSavedViewsRequest", description = "") @Valid @RequestBody(required = false) CreateSavedViewsRequest createSavedViewsRequest
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
 
     /**
      * POST /api/storage_paths
@@ -76,6 +108,45 @@ public interface ConfigApi {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"owner\" : 1, \"path\" : \"path\", \"matching_algorithm\" : 6, \"user_can_change\" : true, \"is_insensitive\" : true, \"name\" : \"name\", \"match\" : \"match\", \"id\" : 0, \"slug\" : \"slug\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * POST /api/ui_settings
+     *
+     * @param createUISettingsRequest  (optional)
+     * @return Success (status code 200)
+     */
+    @Operation(
+        operationId = "createUISettings",
+        tags = { "Config" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = CreateUISettings200Response.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/api/ui_settings",
+        produces = { "application/json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<CreateUISettings200Response> createUISettings(
+        @Parameter(name = "CreateUISettingsRequest", description = "") @Valid @RequestBody(required = false) CreateUISettingsRequest createUISettingsRequest
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"success\" : true }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -138,6 +209,46 @@ public interface ConfigApi {
 
 
     /**
+     * GET /api/saved_views
+     *
+     * @param page  (optional)
+     * @param pageSize  (optional)
+     * @return Success (status code 200)
+     */
+    @Operation(
+        operationId = "getSavedViews",
+        tags = { "Config" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = GetSavedViews200Response.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/saved_views",
+        produces = { "application/json" }
+    )
+    
+    default ResponseEntity<GetSavedViews200Response> getSavedViews(
+        @Parameter(name = "page", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page", required = false) Integer page,
+        @Parameter(name = "page_size", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page_size", required = false) Integer pageSize
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"next\" : 6, \"all\" : [ 5, 5 ], \"previous\" : 1, \"count\" : 0, \"results\" : [ { \"owner\" : { \"is_superuser\" : true, \"is_active\" : true, \"user_permissions\" : [ 9, 9 ], \"is_staff\" : true, \"last_login\" : \"last_login\", \"last_name\" : \"last_name\", \"groups\" : [ \"\", \"\" ], \"password\" : \"password\", \"id\" : 7, \"date_joined\" : \"date_joined\", \"first_name\" : \"first_name\", \"email\" : \"email\", \"username\" : \"username\" }, \"user_can_change\" : true, \"sort_field\" : \"sort_field\", \"show_on_dashboard\" : true, \"name\" : \"name\", \"show_in_sidebar\" : true, \"filter_rules\" : [ { \"rule_type\" : 2, \"value\" : \"value\" }, { \"rule_type\" : 2, \"value\" : \"value\" } ], \"sort_reverse\" : true, \"id\" : 5 }, { \"owner\" : { \"is_superuser\" : true, \"is_active\" : true, \"user_permissions\" : [ 9, 9 ], \"is_staff\" : true, \"last_login\" : \"last_login\", \"last_name\" : \"last_name\", \"groups\" : [ \"\", \"\" ], \"password\" : \"password\", \"id\" : 7, \"date_joined\" : \"date_joined\", \"first_name\" : \"first_name\", \"email\" : \"email\", \"username\" : \"username\" }, \"user_can_change\" : true, \"sort_field\" : \"sort_field\", \"show_on_dashboard\" : true, \"name\" : \"name\", \"show_in_sidebar\" : true, \"filter_rules\" : [ { \"rule_type\" : 2, \"value\" : \"value\" }, { \"rule_type\" : 2, \"value\" : \"value\" } ], \"sort_reverse\" : true, \"id\" : 5 } ] }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
      * GET /api/storage_paths
      *
      * @param page  (optional)
@@ -167,6 +278,43 @@ public interface ConfigApi {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"next\" : true, \"all\" : [ 6, 6 ], \"previous\" : true, \"count\" : 0, \"results\" : [ { \"owner\" : 2, \"path\" : \"path\", \"matching_algorithm\" : 5, \"document_count\" : 5, \"is_insensitive\" : true, \"permissions\" : { \"view\" : { \"groups\" : [ \"\", \"\" ], \"users\" : [ 7, 7 ] }, \"change\" : { \"groups\" : [ \"\", \"\" ], \"users\" : [ 7, 7 ] } }, \"name\" : \"name\", \"match\" : \"match\", \"id\" : 1, \"slug\" : \"slug\" }, { \"owner\" : 2, \"path\" : \"path\", \"matching_algorithm\" : 5, \"document_count\" : 5, \"is_insensitive\" : true, \"permissions\" : { \"view\" : { \"groups\" : [ \"\", \"\" ], \"users\" : [ 7, 7 ] }, \"change\" : { \"groups\" : [ \"\", \"\" ], \"users\" : [ 7, 7 ] } }, \"name\" : \"name\", \"match\" : \"match\", \"id\" : 1, \"slug\" : \"slug\" } ] }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/ui_settings
+     *
+     * @return Success (status code 200)
+     */
+    @Operation(
+        operationId = "getUISettings",
+        tags = { "Config" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = GetUISettings200Response.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/ui_settings",
+        produces = { "application/json" }
+    )
+    
+    default ResponseEntity<GetUISettings200Response> getUISettings(
+        
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"settings\" : { \"update_checking\" : { \"backend_setting\" : \"backend_setting\" } }, \"permissions\" : [ \"permissions\", \"permissions\" ], \"display_name\" : \"display_name\", \"user\" : { \"is_superuser\" : true, \"groups\" : [ \"\", \"\" ], \"id\" : 0, \"username\" : \"username\" } }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

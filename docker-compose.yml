@@ -6,4 +6,12 @@ services:
       dockerfile: Dockerfile
     image: paperless-rest-server:latest
     ports:
-      - 8081:8080
+      - 8081:8081
+  paperless-frontend:
+    container_name: paperless-frontend
+    build:
+      context: .
+      dockerfile: PaperlessWebUI/Dockerfile
+    image: paperless-frontend:nginx
+    ports:
+      - 8080:80
