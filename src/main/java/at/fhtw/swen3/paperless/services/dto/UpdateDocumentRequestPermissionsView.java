@@ -23,7 +23,7 @@ import jakarta.annotation.Generated;
  */
 
 @JsonTypeName("UpdateDocument_request_permissions_view")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-29T23:17:16.529780Z[Etc/UTC]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-30T12:14:24.762781Z[Etc/UTC]")
 public class UpdateDocumentRequestPermissionsView {
 
   @Valid

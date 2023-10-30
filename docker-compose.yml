@@ -1,12 +1,4 @@
 services:
-  paperless-rest:
-    container_name: paperless-rest-server
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: paperless-rest-server:latest
-    ports:
-      - 8081:8081
   paperless-frontend:
     container_name: paperless-frontend
     build:
@@ -15,3 +7,11 @@ services:
     image: paperless-frontend:nginx
     ports:
       - 8080:80
+  paperless-rest:
+    container_name: paperless-rest-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: paperless-rest-server:latest
+    ports:
+      - 8081:8081

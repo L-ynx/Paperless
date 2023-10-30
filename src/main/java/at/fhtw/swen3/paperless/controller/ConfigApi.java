@@ -42,7 +42,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-29T23:17:16.529780Z[Etc/UTC]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-30T11:45:38.946198Z[Etc/UTC]")
 @Validated
 @Controller
 @Tag(name = "Config", description = "the Config API")
@@ -53,7 +53,7 @@ public interface ConfigApi {
     }
 
     /**
-     * POST /api/saved_views
+     * POST /api/saved_views/
      *
      * @param createSavedViewsRequest  (optional)
      * @return Success (status code 200)
@@ -67,20 +67,20 @@ public interface ConfigApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/api/saved_views",
+        value = "/api/saved_views/",
         consumes = { "application/json" }
     )
     
     default ResponseEntity<Void> createSavedViews(
         @Parameter(name = "CreateSavedViewsRequest", description = "") @Valid @RequestBody(required = false) CreateSavedViewsRequest createSavedViewsRequest
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
 
     /**
-     * POST /api/storage_paths
+     * POST /api/storage_paths/
      *
      * @param createStoragePathRequest  (optional)
      * @return Success (status code 200)
@@ -96,7 +96,7 @@ public interface ConfigApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/api/storage_paths",
+        value = "/api/storage_paths/",
         produces = { "application/json" },
         consumes = { "application/json" }
     )
@@ -113,13 +113,13 @@ public interface ConfigApi {
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
 
     /**
-     * POST /api/ui_settings
+     * POST /api/ui_settings/
      *
      * @param createUISettingsRequest  (optional)
      * @return Success (status code 200)
@@ -135,7 +135,7 @@ public interface ConfigApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/api/ui_settings",
+        value = "/api/ui_settings/",
         produces = { "application/json" },
         consumes = { "application/json" }
     )
@@ -152,13 +152,13 @@ public interface ConfigApi {
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
 
     /**
-     * DELETE /api/storage_paths/{id}
+     * DELETE /api/storage_paths/{id}/
      *
      * @param id  (required)
      * @return Success (status code 204)
@@ -172,19 +172,19 @@ public interface ConfigApi {
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/api/storage_paths/{id}"
+        value = "/api/storage_paths/{id}/"
     )
     
     default ResponseEntity<Void> deleteStoragePath(
         @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
 
     /**
-     * GET /ws/status
+     * GET /ws/status/
      *
      * @return Success (status code 200)
      */
@@ -197,19 +197,19 @@ public interface ConfigApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/ws/status"
+        value = "/ws/status/"
     )
     
     default ResponseEntity<Void> get(
         
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
 
     /**
-     * GET /api/saved_views
+     * GET /api/saved_views/
      *
      * @param page  (optional)
      * @param pageSize  (optional)
@@ -226,7 +226,7 @@ public interface ConfigApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/api/saved_views",
+        value = "/api/saved_views/",
         produces = { "application/json" }
     )
     
@@ -243,13 +243,13 @@ public interface ConfigApi {
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
 
     /**
-     * GET /api/storage_paths
+     * GET /api/storage_paths/
      *
      * @param page  (optional)
      * @param fullPerms  (optional)
@@ -266,7 +266,7 @@ public interface ConfigApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/api/storage_paths",
+        value = "/api/storage_paths/",
         produces = { "application/json" }
     )
     
@@ -283,13 +283,13 @@ public interface ConfigApi {
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
 
     /**
-     * GET /api/ui_settings
+     * GET /api/ui_settings/
      *
      * @return Success (status code 200)
      */
@@ -304,7 +304,7 @@ public interface ConfigApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/api/ui_settings",
+        value = "/api/ui_settings/",
         produces = { "application/json" }
     )
     
@@ -320,13 +320,13 @@ public interface ConfigApi {
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
 
     /**
-     * PUT /api/storage_paths/{id}
+     * PUT /api/storage_paths/{id}/
      *
      * @param id  (required)
      * @param updateStoragePathRequest  (optional)
@@ -343,7 +343,7 @@ public interface ConfigApi {
     )
     @RequestMapping(
         method = RequestMethod.PUT,
-        value = "/api/storage_paths/{id}",
+        value = "/api/storage_paths/{id}/",
         produces = { "application/json" },
         consumes = { "application/json" }
     )
@@ -361,7 +361,7 @@ public interface ConfigApi {
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
