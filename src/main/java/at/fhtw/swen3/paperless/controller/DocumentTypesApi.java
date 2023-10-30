@@ -64,7 +64,7 @@ public interface DocumentTypesApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/api/document_types",
+        value = "/api/document_types/",
         produces = { "application/json" },
         consumes = { "application/json" }
     )
@@ -81,7 +81,7 @@ public interface DocumentTypesApi {
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
@@ -101,13 +101,13 @@ public interface DocumentTypesApi {
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/api/document_types/{id}"
+        value = "/api/document_types/{id}/"
     )
     
     default ResponseEntity<Void> deleteDocumentType(
         @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
@@ -130,7 +130,7 @@ public interface DocumentTypesApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/api/document_types",
+        value = "/api/document_types/",
         produces = { "application/json" }
     )
     
@@ -144,10 +144,12 @@ public interface DocumentTypesApi {
                     String exampleString = "{ \"next\" : 6, \"all\" : [ 5, 5 ], \"previous\" : 1, \"count\" : 0, \"results\" : [ { \"owner\" : 9, \"matching_algorithm\" : 2, \"document_count\" : 7, \"is_insensitive\" : true, \"permissions\" : { \"view\" : { \"groups\" : [ \"\", \"\" ], \"users\" : [ \"\", \"\" ] }, \"change\" : { \"groups\" : [ \"\", \"\" ], \"users\" : [ \"\", \"\" ] } }, \"name\" : \"name\", \"match\" : \"match\", \"id\" : 5, \"slug\" : \"slug\" }, { \"owner\" : 9, \"matching_algorithm\" : 2, \"document_count\" : 7, \"is_insensitive\" : true, \"permissions\" : { \"view\" : { \"groups\" : [ \"\", \"\" ], \"users\" : [ \"\", \"\" ] }, \"change\" : { \"groups\" : [ \"\", \"\" ], \"users\" : [ \"\", \"\" ] } }, \"name\" : \"name\", \"match\" : \"match\", \"id\" : 5, \"slug\" : \"slug\" } ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
+                } else {
+                    System.out.println("not compatible with " + mediaType);
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
@@ -170,7 +172,7 @@ public interface DocumentTypesApi {
     )
     @RequestMapping(
         method = RequestMethod.PUT,
-        value = "/api/document_types/{id}",
+        value = "/api/document_types/{id}/",
         produces = { "application/json" },
         consumes = { "application/json" }
     )
@@ -188,7 +190,7 @@ public interface DocumentTypesApi {
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 

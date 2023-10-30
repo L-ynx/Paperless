@@ -60,7 +60,7 @@ public interface SearchApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/api/search/autocomplete",
+        value = "/api/search/autocomplete/",
         produces = { "application/json" }
     )
     
@@ -77,7 +77,7 @@ public interface SearchApi {
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 

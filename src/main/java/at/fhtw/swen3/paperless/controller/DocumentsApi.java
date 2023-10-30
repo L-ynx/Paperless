@@ -64,13 +64,13 @@ public interface DocumentsApi {
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/api/documents/{id}"
+        value = "/api/documents/{id}/"
     )
     
     default ResponseEntity<Void> deleteDocument(
         @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
@@ -94,7 +94,7 @@ public interface DocumentsApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/api/documents/{id}",
+        value = "/api/documents/{id}/",
         produces = { "application/json" }
     )
     
@@ -112,7 +112,7 @@ public interface DocumentsApi {
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
@@ -134,7 +134,7 @@ public interface DocumentsApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/api/documents/{id}/metadata",
+        value = "/api/documents/{id}/metadata/",
         produces = { "application/json" }
     )
     
@@ -150,7 +150,7 @@ public interface DocumentsApi {
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
@@ -180,7 +180,7 @@ public interface DocumentsApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/api/documents",
+        value = "/api/documents/",
         produces = { "application/json" }
     )
     
@@ -204,7 +204,7 @@ public interface DocumentsApi {
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
@@ -227,7 +227,7 @@ public interface DocumentsApi {
     )
     @RequestMapping(
         method = RequestMethod.PUT,
-        value = "/api/documents/{id}",
+        value = "/api/documents/{id}/",
         produces = { "application/json" },
         consumes = { "application/json" }
     )
@@ -245,7 +245,7 @@ public interface DocumentsApi {
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
@@ -270,7 +270,7 @@ public interface DocumentsApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/api/documents/post_document",
+        value = "/api/documents/post_document/",
         consumes = { "multipart/form-data" }
     )
     
@@ -282,7 +282,7 @@ public interface DocumentsApi {
         @Parameter(name = "correspondent", description = "") @Valid @RequestParam(value = "correspondent", required = false) Integer correspondent,
         @Parameter(name = "document", description = "") @RequestPart(value = "document", required = false) List<MultipartFile> document
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
