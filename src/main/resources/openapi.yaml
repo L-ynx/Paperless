@@ -3,28 +3,94 @@ info:
   title: Paperless Rest Server
   version: "1.0"
 servers:
-- url: /
+  - url: /
 paths:
+  /api/correspondents/:
+    get:
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            format: int32
+            type: integer
+        - in: query
+          name: page_size
+          required: false
+          schema:
+            format: int32
+            type: integer
+      responses:
+        "200":
+          description: Success
+      tags:
+        - Documents
+      x-accepts: application/json
+      x-tags:
+        - tag: Documents
+  /api/tags/:
+    get:
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            format: int32
+            type: integer
+        - in: query
+          name: page_size
+          required: false
+          schema:
+            format: int32
+            type: integer
+      responses:
+        "200":
+          description: Success
+      tags:
+        - Documents
+      x-accepts: application/json
+      x-tags:
+        - tag: Documents
+  /api/statistics/:
+    get:
+      responses:
+        "200":
+          description: Success
+      tags:
+        - Statistics
+      x-accepts: application/json
+      x-tags:
+        - tag: Statistics
+  /api/tasks/:
+    get:
+      responses:
+        "200":
+          description: Success
+      tags:
+        - Tasks
+      x-accepts: application/json
+      x-tags:
+        - tag: Tasks
   /api/saved_views:
     get:
       operationId: GetSavedViews
       parameters:
-      - explode: true
-        in: query
-        name: page
-        required: false
-        schema:
-          format: int32
-          type: integer
-        style: form
-      - explode: true
-        in: query
-        name: page_size
-        required: false
-        schema:
-          format: int32
-          type: integer
-        style: form
+        - explode: true
+          in: query
+          name: page
+          required: false
+          schema:
+            format: int32
+            type: integer
+          style: form
+        - explode: true
+          in: query
+          name: page_size
+          required: false
+          schema:
+            format: int32
+            type: integer
+          style: form
       responses:
         "200":
           content:
@@ -94,10 +160,10 @@ paths:
                 $ref: '#/components/schemas/GetSavedViews_200_response'
           description: Success
       tags:
-      - Config
+        - Config
       x-accepts: application/json
       x-tags:
-      - tag: Config
+        - tag: Config
     post:
       operationId: CreateSavedViews
       requestBody:
@@ -115,86 +181,86 @@ paths:
         "200":
           description: Success
       tags:
-      - Config
+        - Config
       x-content-type: application/json
       x-accepts: application/json
       x-tags:
-      - tag: Config
+        - tag: Config
   /api/documents:
     get:
       operationId: GetDocuments
       parameters:
-      - explode: true
-        in: query
-        name: Page
-        required: false
-        schema:
-          format: int32
-          type: integer
-        style: form
-      - explode: true
-        in: query
-        name: page_size
-        required: false
-        schema:
-          format: int32
-          type: integer
-        style: form
-      - explode: true
-        in: query
-        name: query
-        required: false
-        schema:
-          type: string
-        style: form
-      - explode: true
-        in: query
-        name: ordering
-        required: false
-        schema:
-          type: string
-        style: form
-      - explode: true
-        in: query
-        name: tags__id__all
-        required: false
-        schema:
-          items:
+        - explode: true
+          in: query
+          name: Page
+          required: false
+          schema:
             format: int32
             type: integer
-          type: array
-        style: form
-      - explode: true
-        in: query
-        name: document_type__id
-        required: false
-        schema:
-          format: int32
-          type: integer
-        style: form
-      - explode: true
-        in: query
-        name: storage_path__id__in
-        required: false
-        schema:
-          format: int32
-          type: integer
-        style: form
-      - explode: true
-        in: query
-        name: correspondent__id
-        required: false
-        schema:
-          format: int32
-          type: integer
-        style: form
-      - explode: true
-        in: query
-        name: truncate_content
-        required: false
-        schema:
-          type: boolean
-        style: form
+          style: form
+        - explode: true
+          in: query
+          name: page_size
+          required: false
+          schema:
+            format: int32
+            type: integer
+          style: form
+        - explode: true
+          in: query
+          name: query
+          required: false
+          schema:
+            type: string
+          style: form
+        - explode: true
+          in: query
+          name: ordering
+          required: false
+          schema:
+            type: string
+          style: form
+        - explode: true
+          in: query
+          name: tags__id__all
+          required: false
+          schema:
+            items:
+              format: int32
+              type: integer
+            type: array
+          style: form
+        - explode: true
+          in: query
+          name: document_type__id
+          required: false
+          schema:
+            format: int32
+            type: integer
+          style: form
+        - explode: true
+          in: query
+          name: storage_path__id__in
+          required: false
+          schema:
+            format: int32
+            type: integer
+          style: form
+        - explode: true
+          in: query
+          name: correspondent__id
+          required: false
+          schema:
+            format: int32
+            type: integer
+          style: form
+        - explode: true
+          in: query
+          name: truncate_content
+          required: false
+          schema:
+            type: boolean
+          style: form
       responses:
         "200":
           content:
@@ -217,56 +283,56 @@ paths:
                 $ref: '#/components/schemas/GetDocuments_200_response'
           description: Success
       tags:
-      - Documents
+        - Documents
       x-accepts: application/json
       x-tags:
-      - tag: Documents
+        - tag: Documents
   /api/documents/{id}:
     delete:
       operationId: DeleteDocument
       parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: int32
-          type: integer
-        style: simple
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            format: int32
+            type: integer
+          style: simple
       responses:
         "204":
           description: Success
       tags:
-      - Documents
+        - Documents
       x-accepts: application/json
       x-tags:
-      - tag: Documents
+        - tag: Documents
     get:
       operationId: GetDocument
       parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: int32
-          type: integer
-        style: simple
-      - explode: true
-        in: query
-        name: page
-        required: false
-        schema:
-          format: int32
-          type: integer
-        style: form
-      - explode: true
-        in: query
-        name: full_perms
-        required: false
-        schema:
-          type: boolean
-        style: form
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            format: int32
+            type: integer
+          style: simple
+        - explode: true
+          in: query
+          name: page
+          required: false
+          schema:
+            format: int32
+            type: integer
+          style: form
+        - explode: true
+          in: query
+          name: full_perms
+          required: false
+          schema:
+            type: boolean
+          style: form
       responses:
         "200":
           content:
@@ -289,21 +355,21 @@ paths:
                 $ref: '#/components/schemas/GetDocument_200_response'
           description: Success
       tags:
-      - Documents
+        - Documents
       x-accepts: application/json
       x-tags:
-      - tag: Documents
+        - tag: Documents
     put:
       operationId: UpdateDocument
       parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: int32
-          type: integer
-        style: simple
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            format: int32
+            type: integer
+          style: simple
       requestBody:
         content:
           application/json:
@@ -547,11 +613,11 @@ paths:
                 $ref: '#/components/schemas/UpdateDocument_200_response'
           description: Success
       tags:
-      - Documents
+        - Documents
       x-content-type: application/json
       x-accepts: application/json
       x-tags:
-      - tag: Documents
+        - tag: Documents
   /api/documents/post_document:
     post:
       operationId: UploadDocument
@@ -577,23 +643,23 @@ paths:
         "200":
           description: Success
       tags:
-      - Documents
+        - Documents
       x-content-type: multipart/form-data
       x-accepts: application/json
       x-tags:
-      - tag: Documents
+        - tag: Documents
   /api/documents/{id}/metadata:
     get:
       operationId: GetDocumentMetadata
       parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: int32
-          type: integer
-        style: simple
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            format: int32
+            type: integer
+          style: simple
       responses:
         "200":
           content:
@@ -632,29 +698,29 @@ paths:
                 $ref: '#/components/schemas/GetDocumentMetadata_200_response'
           description: Success
       tags:
-      - Documents
+        - Documents
       x-accepts: application/json
       x-tags:
-      - tag: Documents
+        - tag: Documents
   /api/document_types:
     get:
       operationId: GetDocumentTypes
       parameters:
-      - explode: true
-        in: query
-        name: page
-        required: false
-        schema:
-          format: int32
-          type: integer
-        style: form
-      - explode: true
-        in: query
-        name: full_perms
-        required: false
-        schema:
-          type: boolean
-        style: form
+        - explode: true
+          in: query
+          name: page
+          required: false
+          schema:
+            format: int32
+            type: integer
+          style: form
+        - explode: true
+          in: query
+          name: full_perms
+          required: false
+          schema:
+            type: boolean
+          style: form
       responses:
         "200":
           content:
@@ -674,10 +740,10 @@ paths:
                 $ref: '#/components/schemas/GetDocumentTypes_200_response'
           description: Success
       tags:
-      - DocumentTypes
+        - DocumentTypes
       x-accepts: application/json
       x-tags:
-      - tag: DocumentTypes
+        - tag: DocumentTypes
     post:
       operationId: CreateDocumentType
       requestBody:
@@ -702,42 +768,42 @@ paths:
                 $ref: '#/components/schemas/CreateDocumentType_200_response'
           description: Success
       tags:
-      - DocumentTypes
+        - DocumentTypes
       x-content-type: application/json
       x-accepts: application/json
       x-tags:
-      - tag: DocumentTypes
+        - tag: DocumentTypes
   /api/document_types/{id}:
     delete:
       operationId: DeleteDocumentType
       parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: int32
-          type: integer
-        style: simple
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            format: int32
+            type: integer
+          style: simple
       responses:
         "204":
           description: Success
       tags:
-      - DocumentTypes
+        - DocumentTypes
       x-accepts: application/json
       x-tags:
-      - tag: DocumentTypes
+        - tag: DocumentTypes
     put:
       operationId: UpdateDocumentType
       parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: int32
-          type: integer
-        style: simple
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            format: int32
+            type: integer
+          style: simple
       requestBody:
         content:
           application/json:
@@ -763,30 +829,30 @@ paths:
                 $ref: '#/components/schemas/UpdateDocumentType_200_response'
           description: Success
       tags:
-      - DocumentTypes
+        - DocumentTypes
       x-content-type: application/json
       x-accepts: application/json
       x-tags:
-      - tag: DocumentTypes
+        - tag: DocumentTypes
   /api/search/autocomplete:
     get:
       operationId: AutoComplete
       parameters:
-      - explode: true
-        in: query
-        name: term
-        required: false
-        schema:
-          type: string
-        style: form
-      - explode: true
-        in: query
-        name: limit
-        required: false
-        schema:
-          format: int32
-          type: integer
-        style: form
+        - explode: true
+          in: query
+          name: term
+          required: false
+          schema:
+            type: string
+          style: form
+        - explode: true
+          in: query
+          name: limit
+          required: false
+          schema:
+            format: int32
+            type: integer
+          style: form
       responses:
         "200":
           content:
@@ -800,29 +866,29 @@ paths:
                 type: array
           description: Success
       tags:
-      - Search
+        - Search
       x-accepts: application/json
       x-tags:
-      - tag: Search
+        - tag: Search
   /api/storage_paths:
     get:
       operationId: GetStoragePaths
       parameters:
-      - explode: true
-        in: query
-        name: page
-        required: false
-        schema:
-          format: int32
-          type: integer
-        style: form
-      - explode: true
-        in: query
-        name: full_perms
-        required: false
-        schema:
-          type: boolean
-        style: form
+        - explode: true
+          in: query
+          name: page
+          required: false
+          schema:
+            format: int32
+            type: integer
+          style: form
+        - explode: true
+          in: query
+          name: full_perms
+          required: false
+          schema:
+            type: boolean
+          style: form
       responses:
         "200":
           content:
@@ -839,10 +905,10 @@ paths:
                 $ref: '#/components/schemas/GetStoragePaths_200_response'
           description: Success
       tags:
-      - Config
+        - Config
       x-accepts: application/json
       x-tags:
-      - tag: Config
+        - tag: Config
     post:
       operationId: CreateStoragePath
       requestBody:
@@ -867,42 +933,42 @@ paths:
                 $ref: '#/components/schemas/CreateStoragePath_200_response'
           description: Success
       tags:
-      - Config
+        - Config
       x-content-type: application/json
       x-accepts: application/json
       x-tags:
-      - tag: Config
+        - tag: Config
   /api/storage_paths/{id}:
     delete:
       operationId: DeleteStoragePath
       parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: int32
-          type: integer
-        style: simple
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            format: int32
+            type: integer
+          style: simple
       responses:
         "204":
           description: Success
       tags:
-      - Config
+        - Config
       x-accepts: application/json
       x-tags:
-      - tag: Config
+        - tag: Config
     put:
       operationId: UpdateStoragePath
       parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: int32
-          type: integer
-        style: simple
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            format: int32
+            type: integer
+          style: simple
       requestBody:
         content:
           application/json:
@@ -929,11 +995,11 @@ paths:
                 $ref: '#/components/schemas/UpdateStoragePath_200_response'
           description: Success
       tags:
-      - Config
+        - Config
       x-content-type: application/json
       x-accepts: application/json
       x-tags:
-      - tag: Config
+        - tag: Config
   /api/ui_settings:
     get:
       operationId: GetUISettings
@@ -982,10 +1048,10 @@ paths:
                 $ref: '#/components/schemas/GetUISettings_200_response'
           description: Success
       tags:
-      - Config
+        - Config
       x-accepts: application/json
       x-tags:
-      - tag: Config
+        - tag: Config
     post:
       operationId: CreateUISettings
       requestBody:
@@ -1017,22 +1083,22 @@ paths:
                 $ref: '#/components/schemas/CreateUISettings_200_response'
           description: Success
       tags:
-      - Config
+        - Config
       x-content-type: application/json
       x-accepts: application/json
       x-tags:
-      - tag: Config
-  /ws/status:
+        - tag: Config
+  /ws/status/:
     get:
       operationId: Get
       responses:
         "200":
           description: Success
       tags:
-      - Config
+        - Config
       x-accepts: application/json
       x-tags:
-      - tag: Config
+        - tag: Config
 components:
   schemas:
     Correspondent:
@@ -1243,22 +1309,22 @@ components:
         value:
           type: string
       required:
-      - rule_type
-      - value
+        - rule_type
+        - value
       type: object
     GetSavedViews_200_response_results_inner_owner:
       example:
         is_superuser: true
         is_active: true
         user_permissions:
-        - 9
-        - 9
+          - 9
+          - 9
         is_staff: true
         last_login: last_login
         last_name: last_name
         groups:
-        - ""
-        - ""
+          - ""
+          - ""
         password: password
         id: 7
         date_joined: date_joined
@@ -1289,26 +1355,26 @@ components:
         date_joined:
           type: string
         groups:
-          items: {}
+          items: { }
           type: array
         user_permissions:
           items:
             type: integer
           type: array
       required:
-      - date_joined
-      - email
-      - first_name
-      - groups
-      - id
-      - is_active
-      - is_staff
-      - is_superuser
-      - last_login
-      - last_name
-      - password
-      - user_permissions
-      - username
+        - date_joined
+        - email
+        - first_name
+        - groups
+        - id
+        - is_active
+        - is_staff
+        - is_superuser
+        - last_login
+        - last_name
+        - password
+        - user_permissions
+        - username
       type: object
     GetSavedViews_200_response_results_inner:
       example:
@@ -1316,14 +1382,14 @@ components:
           is_superuser: true
           is_active: true
           user_permissions:
-          - 9
-          - 9
+            - 9
+            - 9
           is_staff: true
           last_login: last_login
           last_name: last_name
           groups:
-          - ""
-          - ""
+            - ""
+            - ""
           password: password
           id: 7
           date_joined: date_joined
@@ -1336,10 +1402,10 @@ components:
         name: name
         show_in_sidebar: true
         filter_rules:
-        - rule_type: 2
-          value: value
-        - rule_type: 2
-          value: value
+          - rule_type: 2
+            value: value
+          - rule_type: 2
+            value: value
         sort_reverse: true
         id: 5
       properties:
@@ -1364,85 +1430,85 @@ components:
         user_can_change:
           type: boolean
       required:
-      - filter_rules
-      - id
-      - name
-      - owner
-      - show_in_sidebar
-      - show_on_dashboard
-      - sort_field
-      - sort_reverse
-      - user_can_change
+        - filter_rules
+        - id
+        - name
+        - owner
+        - show_in_sidebar
+        - show_on_dashboard
+        - sort_field
+        - sort_reverse
+        - user_can_change
       type: object
     GetSavedViews_200_response:
       example:
         next: 6
         all:
-        - 5
-        - 5
+          - 5
+          - 5
         previous: 1
         count: 0
         results:
-        - owner:
-            is_superuser: true
-            is_active: true
-            user_permissions:
-            - 9
-            - 9
-            is_staff: true
-            last_login: last_login
-            last_name: last_name
-            groups:
-            - ""
-            - ""
-            password: password
-            id: 7
-            date_joined: date_joined
-            first_name: first_name
-            email: email
-            username: username
-          user_can_change: true
-          sort_field: sort_field
-          show_on_dashboard: true
-          name: name
-          show_in_sidebar: true
-          filter_rules:
-          - rule_type: 2
-            value: value
-          - rule_type: 2
-            value: value
-          sort_reverse: true
-          id: 5
-        - owner:
-            is_superuser: true
-            is_active: true
-            user_permissions:
-            - 9
-            - 9
-            is_staff: true
-            last_login: last_login
-            last_name: last_name
-            groups:
-            - ""
-            - ""
-            password: password
-            id: 7
-            date_joined: date_joined
-            first_name: first_name
-            email: email
-            username: username
-          user_can_change: true
-          sort_field: sort_field
-          show_on_dashboard: true
-          name: name
-          show_in_sidebar: true
-          filter_rules:
-          - rule_type: 2
-            value: value
-          - rule_type: 2
-            value: value
-          sort_reverse: true
-          id: 5
+          - owner:
+              is_superuser: true
+              is_active: true
+              user_permissions:
+                - 9
+                - 9
+              is_staff: true
+              last_login: last_login
+              last_name: last_name
+              groups:
+                - ""
+                - ""
+              password: password
+              id: 7
+              date_joined: date_joined
+              first_name: first_name
+              email: email
+              username: username
+            user_can_change: true
+            sort_field: sort_field
+            show_on_dashboard: true
+            name: name
+            show_in_sidebar: true
+            filter_rules:
+              - rule_type: 2
+                value: value
+              - rule_type: 2
+                value: value
+            sort_reverse: true
+            id: 5
+          - owner:
+              is_superuser: true
+              is_active: true
+              user_permissions:
+                - 9
+                - 9
+              is_staff: true
+              last_login: last_login
+              last_name: last_name
+              groups:
+                - ""
+                - ""
+              password: password
+              id: 7
+              date_joined: date_joined
+              first_name: first_name
+              email: email
+              username: username
+            user_can_change: true
+            sort_field: sort_field
+            show_on_dashboard: true
+            name: name
+            show_in_sidebar: true
+            filter_rules:
+              - rule_type: 2
+                value: value
+              - rule_type: 2
+                value: value
+            sort_reverse: true
+            id: 5
       properties:
         count:
           type: integer
@@ -1459,11 +1525,11 @@ components:
             $ref: '#/components/schemas/GetSavedViews_200_response_results_inner'
           type: array
       required:
-      - all
-      - count
-      - next
-      - previous
-      - results
+        - all
+        - count
+        - next
+        - previous
+        - results
       type: object
     CreateSavedViews_request:
       properties:
@@ -1482,12 +1548,12 @@ components:
         sort_field:
           type: string
       required:
-      - filter_rules
-      - name
-      - show_in_sidebar
-      - show_on_dashboard
-      - sort_field
-      - sort_reverse
+        - filter_rules
+        - name
+        - show_in_sidebar
+        - show_on_dashboard
+        - sort_field
+        - sort_reverse
       type: object
     GetDocuments_200_response_results_inner_notes_inner:
       example:
@@ -1508,11 +1574,11 @@ components:
         user:
           type: integer
       required:
-      - created
-      - document
-      - id
-      - note
-      - user
+        - created
+        - document
+        - id
+        - note
+        - user
       type: object
     GetDocuments_200_response_results_inner:
       example:
@@ -1520,23 +1586,23 @@ components:
         user_can_change: true
         archive_serial_number: 2
         notes:
-        - note: note
-          created: created
-          document: 1
-          id: 7
-          user: 1
-        - note: note
-          created: created
-          document: 1
-          id: 7
-          user: 1
+          - note: note
+            created: created
+            document: 1
+            id: 7
+            user: 1
+          - note: note
+            created: created
+            document: 1
+            id: 7
+            user: 1
         added: added
         created: created
         title: title
         content: content
         tags:
-        - 3
-        - 3
+          - 3
+          - 3
         storage_path: 9
         archived_file_name: archived_file_name
         modified: modified
@@ -1585,91 +1651,91 @@ components:
             $ref: '#/components/schemas/GetDocuments_200_response_results_inner_notes_inner'
           type: array
       required:
-      - added
-      - archive_serial_number
-      - archived_file_name
-      - content
-      - correspondent
-      - created
-      - created_date
-      - document_type
-      - id
-      - modified
-      - notes
-      - original_file_name
-      - owner
-      - storage_path
-      - tags
-      - title
-      - user_can_change
+        - added
+        - archive_serial_number
+        - archived_file_name
+        - content
+        - correspondent
+        - created
+        - created_date
+        - document_type
+        - id
+        - modified
+        - notes
+        - original_file_name
+        - owner
+        - storage_path
+        - tags
+        - title
+        - user_can_change
       type: object
     GetDocuments_200_response:
       example:
         next: 6
         all:
-        - 5
-        - 5
+          - 5
+          - 5
         previous: 1
         count: 0
         results:
-        - owner: 4
-          user_can_change: true
-          archive_serial_number: 2
-          notes:
-          - note: note
+          - owner: 4
+            user_can_change: true
+            archive_serial_number: 2
+            notes:
+              - note: note
+                created: created
+                document: 1
+                id: 7
+                user: 1
+              - note: note
+                created: created
+                document: 1
+                id: 7
+                user: 1
+            added: added
             created: created
-            document: 1
-            id: 7
-            user: 1
-          - note: note
+            title: title
+            content: content
+            tags:
+              - 3
+              - 3
+            storage_path: 9
+            archived_file_name: archived_file_name
+            modified: modified
+            correspondent: 2
+            original_file_name: original_file_name
+            id: 5
+            created_date: created_date
+            document_type: 7
+          - owner: 4
+            user_can_change: true
+            archive_serial_number: 2
+            notes:
+              - note: note
+                created: created
+                document: 1
+                id: 7
+                user: 1
+              - note: note
+                created: created
+                document: 1
+                id: 7
+                user: 1
+            added: added
             created: created
-            document: 1
-            id: 7
-            user: 1
-          added: added
-          created: created
-          title: title
-          content: content
-          tags:
-          - 3
-          - 3
-          storage_path: 9
-          archived_file_name: archived_file_name
-          modified: modified
-          correspondent: 2
-          original_file_name: original_file_name
-          id: 5
-          created_date: created_date
-          document_type: 7
-        - owner: 4
-          user_can_change: true
-          archive_serial_number: 2
-          notes:
-          - note: note
-            created: created
-            document: 1
-            id: 7
-            user: 1
-          - note: note
-            created: created
-            document: 1
-            id: 7
-            user: 1
-          added: added
-          created: created
-          title: title
-          content: content
-          tags:
-          - 3
-          - 3
-          storage_path: 9
-          archived_file_name: archived_file_name
-          modified: modified
-          correspondent: 2
-          original_file_name: original_file_name
-          id: 5
-          created_date: created_date
-          document_type: 7
+            title: title
+            content: content
+            tags:
+              - 3
+              - 3
+            storage_path: 9
+            archived_file_name: archived_file_name
+            modified: modified
+            correspondent: 2
+            original_file_name: original_file_name
+            id: 5
+            created_date: created_date
+            document_type: 7
       properties:
         count:
           type: integer
@@ -1686,20 +1752,20 @@ components:
             $ref: '#/components/schemas/GetDocuments_200_response_results_inner'
           type: array
       required:
-      - all
-      - count
-      - next
-      - previous
-      - results
+        - all
+        - count
+        - next
+        - previous
+        - results
       type: object
     GetDocument_200_response_permissions_view:
       example:
         groups:
-        - 3
-        - 3
+          - 3
+          - 3
         users:
-        - 9
-        - 9
+          - 9
+          - 9
       properties:
         users:
           items:
@@ -1710,72 +1776,72 @@ components:
             type: integer
           type: array
       required:
-      - groups
-      - users
+        - groups
+        - users
       type: object
     GetDocument_200_response_permissions:
       example:
         view:
           groups:
-          - 3
-          - 3
+            - 3
+            - 3
           users:
-          - 9
-          - 9
+            - 9
+            - 9
         change:
           groups:
-          - 3
-          - 3
+            - 3
+            - 3
           users:
-          - 9
-          - 9
+            - 9
+            - 9
       properties:
         view:
           $ref: '#/components/schemas/GetDocument_200_response_permissions_view'
         change:
           $ref: '#/components/schemas/GetDocument_200_response_permissions_view'
       required:
-      - change
-      - view
+        - change
+        - view
       type: object
     GetDocument_200_response:
       example:
         owner: 7
         archive_serial_number: 2
         notes:
-        - note: note
-          created: created
-          document: 1
-          id: 7
-          user: 1
-        - note: note
-          created: created
-          document: 1
-          id: 7
-          user: 1
+          - note: note
+            created: created
+            document: 1
+            id: 7
+            user: 1
+          - note: note
+            created: created
+            document: 1
+            id: 7
+            user: 1
         added: added
         created: created
         title: title
         content: content
         tags:
-        - 5
-        - 5
+          - 5
+          - 5
         storage_path: 5
         permissions:
           view:
             groups:
-            - 3
-            - 3
+              - 3
+              - 3
             users:
-            - 9
-            - 9
+              - 9
+              - 9
           change:
             groups:
-            - 3
-            - 3
+              - 3
+              - 3
             users:
-            - 9
-            - 9
+              - 9
+              - 9
         archived_file_name: archived_file_name
         modified: modified
         correspondent: 6
@@ -1823,67 +1889,67 @@ components:
             $ref: '#/components/schemas/GetDocuments_200_response_results_inner_notes_inner'
           type: array
       required:
-      - added
-      - archive_serial_number
-      - archived_file_name
-      - content
-      - correspondent
-      - created
-      - created_date
-      - document_type
-      - id
-      - modified
-      - notes
-      - original_file_name
-      - owner
-      - permissions
-      - storage_path
-      - tags
-      - title
+        - added
+        - archive_serial_number
+        - archived_file_name
+        - content
+        - correspondent
+        - created
+        - created_date
+        - document_type
+        - id
+        - modified
+        - notes
+        - original_file_name
+        - owner
+        - permissions
+        - storage_path
+        - tags
+        - title
       type: object
     UpdateDocument_request_permissions_view:
       example:
         groups:
-        - ""
-        - ""
+          - ""
+          - ""
         users:
-        - ""
-        - ""
+          - ""
+          - ""
       properties:
         users:
-          items: {}
+          items: { }
           type: array
         groups:
-          items: {}
+          items: { }
           type: array
       required:
-      - groups
-      - users
+        - groups
+        - users
       type: object
     UpdateDocument_request_permissions:
       example:
         view:
           groups:
-          - ""
-          - ""
+            - ""
+            - ""
           users:
-          - ""
-          - ""
+            - ""
+            - ""
         change:
           groups:
-          - ""
-          - ""
+            - ""
+            - ""
           users:
-          - ""
-          - ""
+            - ""
+            - ""
       properties:
         view:
           $ref: '#/components/schemas/UpdateDocument_request_permissions_view'
         change:
           $ref: '#/components/schemas/UpdateDocument_request_permissions_view'
       required:
-      - change
-      - view
+        - change
+        - view
       type: object
     UpdateDocument_request:
       properties:
@@ -1920,25 +1986,25 @@ components:
         permissions:
           $ref: '#/components/schemas/UpdateDocument_request_permissions'
         notes:
-          items: {}
+          items: { }
           type: array
       required:
-      - added
-      - archive_serial_number
-      - archived_file_name
-      - content
-      - correspondent
-      - created_date
-      - document_type
-      - id
-      - modified
-      - notes
-      - original_file_name
-      - owner
-      - permissions
-      - storage_path
-      - tags
-      - title
+        - added
+        - archive_serial_number
+        - archived_file_name
+        - content
+        - correspondent
+        - created_date
+        - document_type
+        - id
+        - modified
+        - notes
+        - original_file_name
+        - owner
+        - permissions
+        - storage_path
+        - tags
+        - title
       type: object
     UpdateDocument_200_response:
       example:
@@ -1946,15 +2012,15 @@ components:
         user_can_change: true
         archive_serial_number: 2
         notes:
-        - ""
-        - ""
+          - ""
+          - ""
         added: added
         created: created
         title: title
         content: content
         tags:
-        - 5
-        - 5
+          - 5
+          - 5
         storage_path: 5
         archived_file_name: archived_file_name
         modified: modified
@@ -1999,26 +2065,26 @@ components:
         user_can_change:
           type: boolean
         notes:
-          items: {}
+          items: { }
           type: array
       required:
-      - added
-      - archive_serial_number
-      - archived_file_name
-      - content
-      - correspondent
-      - created
-      - created_date
-      - document_type
-      - id
-      - modified
-      - notes
-      - original_file_name
-      - owner
-      - storage_path
-      - tags
-      - title
-      - user_can_change
+        - added
+        - archive_serial_number
+        - archived_file_name
+        - content
+        - correspondent
+        - created
+        - created_date
+        - document_type
+        - id
+        - modified
+        - notes
+        - original_file_name
+        - owner
+        - storage_path
+        - tags
+        - title
+        - user_can_change
       type: object
     UploadDocument_request:
       properties:
@@ -2060,26 +2126,26 @@ components:
         value:
           type: string
       required:
-      - key
-      - namespace
-      - prefix
-      - value
+        - key
+        - namespace
+        - prefix
+        - value
       type: object
     GetDocumentMetadata_200_response:
       example:
         archive_size: 6
         archive_metadata:
-        - prefix: prefix
-          namespace: namespace
-          value: value
-          key: key
-        - prefix: prefix
-          namespace: namespace
-          value: value
-          key: key
+          - prefix: prefix
+            namespace: namespace
+            value: value
+            key: key
+          - prefix: prefix
+            namespace: namespace
+            value: value
+            key: key
         original_metadata:
-        - ""
-        - ""
+          - ""
+          - ""
         original_filename: original_filename
         original_mime_type: original_mime_type
         archive_checksum: archive_checksum
@@ -2101,7 +2167,7 @@ components:
         has_archive_version:
           type: boolean
         original_metadata:
-          items: {}
+          items: { }
           type: array
         archive_checksum:
           type: string
@@ -2118,18 +2184,18 @@ components:
             $ref: '#/components/schemas/GetDocumentMetadata_200_response_archive_metadata_inner'
           type: array
       required:
-      - archive_checksum
-      - archive_media_filename
-      - archive_metadata
-      - archive_size
-      - has_archive_version
-      - lang
-      - media_filename
-      - original_checksum
-      - original_filename
-      - original_metadata
-      - original_mime_type
-      - original_size
+        - archive_checksum
+        - archive_media_filename
+        - archive_metadata
+        - archive_size
+        - has_archive_version
+        - lang
+        - media_filename
+        - original_checksum
+        - original_filename
+        - original_metadata
+        - original_mime_type
+        - original_size
       type: object
     GetDocumentTypes_200_response_results_inner:
       example:
@@ -2140,18 +2206,18 @@ components:
         permissions:
           view:
             groups:
-            - ""
-            - ""
+              - ""
+              - ""
             users:
-            - ""
-            - ""
+              - ""
+              - ""
           change:
             groups:
-            - ""
-            - ""
+              - ""
+              - ""
             users:
-            - ""
-            - ""
+              - ""
+              - ""
         name: name
         match: match
         id: 5
@@ -2176,71 +2242,71 @@ components:
         permissions:
           $ref: '#/components/schemas/UpdateDocument_request_permissions'
       required:
-      - document_count
-      - id
-      - is_insensitive
-      - match
-      - matching_algorithm
-      - name
-      - owner
-      - permissions
-      - slug
+        - document_count
+        - id
+        - is_insensitive
+        - match
+        - matching_algorithm
+        - name
+        - owner
+        - permissions
+        - slug
       type: object
     GetDocumentTypes_200_response:
       example:
         next: 6
         all:
-        - 5
-        - 5
+          - 5
+          - 5
         previous: 1
         count: 0
         results:
-        - owner: 9
-          matching_algorithm: 2
-          document_count: 7
-          is_insensitive: true
-          permissions:
-            view:
-              groups:
-              - ""
-              - ""
-              users:
-              - ""
-              - ""
-            change:
-              groups:
-              - ""
-              - ""
-              users:
-              - ""
-              - ""
-          name: name
-          match: match
-          id: 5
-          slug: slug
-        - owner: 9
-          matching_algorithm: 2
-          document_count: 7
-          is_insensitive: true
-          permissions:
-            view:
-              groups:
-              - ""
-              - ""
-              users:
-              - ""
-              - ""
-            change:
-              groups:
-              - ""
-              - ""
-              users:
-              - ""
-              - ""
-          name: name
-          match: match
-          id: 5
-          slug: slug
+          - owner: 9
+            matching_algorithm: 2
+            document_count: 7
+            is_insensitive: true
+            permissions:
+              view:
+                groups:
+                  - ""
+                  - ""
+                users:
+                  - ""
+                  - ""
+              change:
+                groups:
+                  - ""
+                  - ""
+                users:
+                  - ""
+                  - ""
+            name: name
+            match: match
+            id: 5
+            slug: slug
+          - owner: 9
+            matching_algorithm: 2
+            document_count: 7
+            is_insensitive: true
+            permissions:
+              view:
+                groups:
+                  - ""
+                  - ""
+                users:
+                  - ""
+                  - ""
+              change:
+                groups:
+                  - ""
+                  - ""
+                users:
+                  - ""
+                  - ""
+            name: name
+            match: match
+            id: 5
+            slug: slug
       properties:
         count:
           type: integer
@@ -2257,11 +2323,11 @@ components:
             $ref: '#/components/schemas/GetDocumentTypes_200_response_results_inner'
           type: array
       required:
-      - all
-      - count
-      - next
-      - previous
-      - results
+        - all
+        - count
+        - next
+        - previous
+        - results
       type: object
     CreateDocumentType_request:
       properties:
@@ -2276,11 +2342,11 @@ components:
         owner:
           type: integer
       required:
-      - is_insensitive
-      - match
-      - matching_algorithm
-      - name
-      - owner
+        - is_insensitive
+        - match
+        - matching_algorithm
+        - name
+        - owner
       type: object
     CreateDocumentType_200_response:
       example:
@@ -2310,21 +2376,21 @@ components:
         user_can_change:
           type: boolean
       required:
-      - id
-      - is_insensitive
-      - match
-      - matching_algorithm
-      - name
-      - owner
-      - slug
-      - user_can_change
+        - id
+        - is_insensitive
+        - match
+        - matching_algorithm
+        - name
+        - owner
+        - slug
+        - user_can_change
       type: object
     UpdateDocumentType_request_permissions_form:
       properties:
         owner:
           type: integer
       required:
-      - owner
+        - owner
       type: object
     UpdateDocumentType_request:
       properties:
@@ -2349,15 +2415,15 @@ components:
         permissions_form:
           $ref: '#/components/schemas/UpdateDocumentType_request_permissions_form'
       required:
-      - document_count
-      - id
-      - is_insensitive
-      - match
-      - matching_algorithm
-      - name
-      - owner
-      - permissions
-      - slug
+        - document_count
+        - id
+        - is_insensitive
+        - match
+        - matching_algorithm
+        - name
+        - owner
+        - permissions
+        - slug
       type: object
     UpdateDocumentType_200_response:
       example:
@@ -2390,60 +2456,60 @@ components:
         user_can_change:
           type: boolean
       required:
-      - document_count
-      - id
-      - is_insensitive
-      - match
-      - matching_algorithm
-      - name
-      - owner
-      - slug
-      - user_can_change
+        - document_count
+        - id
+        - is_insensitive
+        - match
+        - matching_algorithm
+        - name
+        - owner
+        - slug
+        - user_can_change
       type: object
     GetStoragePaths_200_response_results_inner_permissions_view:
       example:
         groups:
-        - ""
-        - ""
+          - ""
+          - ""
         users:
-        - 7
-        - 7
+          - 7
+          - 7
       properties:
         users:
           items:
             type: integer
           type: array
         groups:
-          items: {}
+          items: { }
           type: array
       required:
-      - groups
-      - users
+        - groups
+        - users
       type: object
     GetStoragePaths_200_response_results_inner_permissions:
       example:
         view:
           groups:
-          - ""
-          - ""
+            - ""
+            - ""
           users:
-          - 7
-          - 7
+            - 7
+            - 7
         change:
           groups:
-          - ""
-          - ""
+            - ""
+            - ""
           users:
-          - 7
-          - 7
+            - 7
+            - 7
       properties:
         view:
           $ref: '#/components/schemas/GetStoragePaths_200_response_results_inner_permissions_view'
         change:
           $ref: '#/components/schemas/GetStoragePaths_200_response_results_inner_permissions_view'
       required:
-      - change
-      - view
+        - change
+        - view
       type: object
     GetStoragePaths_200_response_results_inner:
       example:
@@ -2455,18 +2521,18 @@ components:
         permissions:
           view:
             groups:
-            - ""
-            - ""
+              - ""
+              - ""
             users:
-            - 7
-            - 7
+              - 7
+              - 7
           change:
             groups:
-            - ""
-            - ""
+              - ""
+              - ""
             users:
-            - 7
-            - 7
+              - 7
+              - 7
         name: name
         match: match
         id: 1
@@ -2493,74 +2559,74 @@ components:
         permissions:
           $ref: '#/components/schemas/GetStoragePaths_200_response_results_inner_permissions'
       required:
-      - document_count
-      - id
-      - is_insensitive
-      - match
-      - matching_algorithm
-      - name
-      - owner
-      - path
-      - permissions
-      - slug
+        - document_count
+        - id
+        - is_insensitive
+        - match
+        - matching_algorithm
+        - name
+        - owner
+        - path
+        - permissions
+        - slug
       type: object
     GetStoragePaths_200_response:
       example:
         next: true
         all:
-        - 6
-        - 6
+          - 6
+          - 6
         previous: true
         count: 0
         results:
-        - owner: 2
-          path: path
-          matching_algorithm: 5
-          document_count: 5
-          is_insensitive: true
-          permissions:
-            view:
-              groups:
-              - ""
-              - ""
-              users:
-              - 7
-              - 7
-            change:
-              groups:
-              - ""
-              - ""
-              users:
-              - 7
-              - 7
-          name: name
-          match: match
-          id: 1
-          slug: slug
-        - owner: 2
-          path: path
-          matching_algorithm: 5
-          document_count: 5
-          is_insensitive: true
-          permissions:
-            view:
-              groups:
-              - ""
-              - ""
-              users:
-              - 7
-              - 7
-            change:
-              groups:
-              - ""
-              - ""
-              users:
-              - 7
-              - 7
-          name: name
-          match: match
-          id: 1
-          slug: slug
+          - owner: 2
+            path: path
+            matching_algorithm: 5
+            document_count: 5
+            is_insensitive: true
+            permissions:
+              view:
+                groups:
+                  - ""
+                  - ""
+                users:
+                  - 7
+                  - 7
+              change:
+                groups:
+                  - ""
+                  - ""
+                users:
+                  - 7
+                  - 7
+            name: name
+            match: match
+            id: 1
+            slug: slug
+          - owner: 2
+            path: path
+            matching_algorithm: 5
+            document_count: 5
+            is_insensitive: true
+            permissions:
+              view:
+                groups:
+                  - ""
+                  - ""
+                users:
+                  - 7
+                  - 7
+              change:
+                groups:
+                  - ""
+                  - ""
+                users:
+                  - 7
+                  - 7
+            name: name
+            match: match
+            id: 1
+            slug: slug
       properties:
         count:
           type: integer
@@ -2577,11 +2643,11 @@ components:
             $ref: '#/components/schemas/GetStoragePaths_200_response_results_inner'
           type: array
       required:
-      - all
-      - count
-      - next
-      - previous
-      - results
+        - all
+        - count
+        - next
+        - previous
+        - results
       type: object
     CreateStoragePath_request:
       properties:
@@ -2598,12 +2664,12 @@ components:
         owner:
           type: integer
       required:
-      - is_insensitive
-      - match
-      - matching_algorithm
-      - name
-      - owner
-      - path
+        - is_insensitive
+        - match
+        - matching_algorithm
+        - name
+        - owner
+        - path
       type: object
     CreateStoragePath_200_response:
       example:
@@ -2636,15 +2702,15 @@ components:
         user_can_change:
           type: boolean
       required:
-      - id
-      - is_insensitive
-      - match
-      - matching_algorithm
-      - name
-      - owner
-      - path
-      - slug
-      - user_can_change
+        - id
+        - is_insensitive
+        - match
+        - matching_algorithm
+        - name
+        - owner
+        - path
+        - slug
+        - user_can_change
       type: object
     UpdateStoragePath_request:
       properties:
@@ -2671,17 +2737,17 @@ components:
         permissions_form:
           $ref: '#/components/schemas/UpdateDocumentType_request_permissions_form'
       required:
-      - document_count
-      - id
-      - is_insensitive
-      - match
-      - matching_algorithm
-      - name
-      - owner
-      - path
-      - permissions
-      - permissions_form
-      - slug
+        - document_count
+        - id
+        - is_insensitive
+        - match
+        - matching_algorithm
+        - name
+        - owner
+        - path
+        - permissions
+        - permissions_form
+        - slug
       type: object
     UpdateStoragePath_200_response:
       example:
@@ -2717,23 +2783,23 @@ components:
         user_can_change:
           type: boolean
       required:
-      - document_count
-      - id
-      - is_insensitive
-      - match
-      - matching_algorithm
-      - name
-      - owner
-      - path
-      - slug
-      - user_can_change
+        - document_count
+        - id
+        - is_insensitive
+        - match
+        - matching_algorithm
+        - name
+        - owner
+        - path
+        - slug
+        - user_can_change
       type: object
     GetUISettings_200_response_user:
       example:
         is_superuser: true
         groups:
-        - ""
-        - ""
+          - ""
+          - ""
         id: 0
         username: username
       properties:
@@ -2744,13 +2810,13 @@ components:
         is_superuser:
           type: boolean
         groups:
-          items: {}
+          items: { }
           type: array
       required:
-      - groups
-      - id
-      - is_superuser
-      - username
+        - groups
+        - id
+        - is_superuser
+        - username
       type: object
     GetUISettings_200_response_settings_update_checking:
       example:
@@ -2759,7 +2825,7 @@ components:
         backend_setting:
           type: string
       required:
-      - backend_setting
+        - backend_setting
       type: object
     GetUISettings_200_response_settings:
       example:
@@ -2769,7 +2835,7 @@ components:
         update_checking:
           $ref: '#/components/schemas/GetUISettings_200_response_settings_update_checking'
       required:
-      - update_checking
+        - update_checking
       type: object
     GetUISettings_200_response:
       example:
@@ -2777,14 +2843,14 @@ components:
           update_checking:
             backend_setting: backend_setting
         permissions:
-        - permissions
-        - permissions
+          - permissions
+          - permissions
         display_name: display_name
         user:
           is_superuser: true
           groups:
-          - ""
-          - ""
+            - ""
+            - ""
           id: 0
           username: username
       properties:
@@ -2799,10 +2865,10 @@ components:
             type: string
           type: array
       required:
-      - display_name
-      - permissions
-      - settings
-      - user
+        - display_name
+        - permissions
+        - settings
+        - user
       type: object
     CreateUISettings_request_settings_update_checking:
       properties:
@@ -2811,8 +2877,8 @@ components:
         enabled:
           type: boolean
       required:
-      - backend_setting
-      - enabled
+        - backend_setting
+        - enabled
       type: object
     CreateUISettings_request_settings_bulk_edit:
       properties:
@@ -2821,8 +2887,8 @@ components:
         confirmation_dialogs:
           type: boolean
       required:
-      - apply_on_close
-      - confirmation_dialogs
+        - apply_on_close
+        - confirmation_dialogs
       type: object
     CreateUISettings_request_settings_dark_mode:
       properties:
@@ -2833,23 +2899,23 @@ components:
         thumb_inverted:
           type: string
       required:
-      - enabled
-      - thumb_inverted
-      - use_system
+        - enabled
+        - thumb_inverted
+        - use_system
       type: object
     CreateUISettings_request_settings_theme:
       properties:
         color:
           type: string
       required:
-      - color
+        - color
       type: object
     CreateUISettings_request_settings_document_details:
       properties:
         native_pdf_viewer:
           type: boolean
       required:
-      - native_pdf_viewer
+        - native_pdf_viewer
       type: object
     CreateUISettings_request_settings_date_display:
       properties:
@@ -2858,8 +2924,8 @@ components:
         date_format:
           type: string
       required:
-      - date_format
-      - date_locale
+        - date_format
+        - date_locale
       type: object
     CreateUISettings_request_settings_notifications:
       properties:
@@ -2872,17 +2938,17 @@ components:
         consumer_suppress_on_dashboard:
           type: boolean
       required:
-      - consumer_failed
-      - consumer_new_documents
-      - consumer_success
-      - consumer_suppress_on_dashboard
+        - consumer_failed
+        - consumer_new_documents
+        - consumer_success
+        - consumer_suppress_on_dashboard
       type: object
     CreateUISettings_request_settings_saved_views:
       properties:
         warn_on_unsaved_change:
           type: boolean
       required:
-      - warn_on_unsaved_change
+        - warn_on_unsaved_change
       type: object
     CreateUISettings_request_settings:
       properties:
@@ -2913,26 +2979,26 @@ components:
         language:
           type: string
       required:
-      - bulk_edit
-      - dark_mode
-      - date_display
-      - documentListSize
-      - document_details
-      - language
-      - notes_enabled
-      - notifications
-      - saved_views
-      - slim_sidebar
-      - theme
-      - tour_complete
-      - update_checking
+        - bulk_edit
+        - dark_mode
+        - date_display
+        - documentListSize
+        - document_details
+        - language
+        - notes_enabled
+        - notifications
+        - saved_views
+        - slim_sidebar
+        - theme
+        - tour_complete
+        - update_checking
       type: object
     CreateUISettings_request:
       properties:
         settings:
           $ref: '#/components/schemas/CreateUISettings_request_settings'
       required:
-      - settings
+        - settings
       type: object
     CreateUISettings_200_response:
       example:
@@ -2941,5 +3007,5 @@ components:
         success:
           type: boolean
       required:
-      - success
+        - success
       type: object

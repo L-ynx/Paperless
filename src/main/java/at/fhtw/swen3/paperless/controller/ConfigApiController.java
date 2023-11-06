@@ -66,5 +66,11 @@ public class ConfigApiController implements ConfigApi {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<CreateUISettings200Response> createUISettings(CreateUISettingsRequest createUISettingsRequest) {
+        CreateUISettings200Response response = new CreateUISettings200Response();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 
 }

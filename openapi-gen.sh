@@ -6,7 +6,7 @@ docker run \
   --name openapi-gen \
   -v ${PWD}:/local \
   openapitools/openapi-generator-cli generate \
-  -i /local/openapi.yaml \
+  -i /local/src/main/resources/openapi.yaml \
   -g spring \
   -p pocoModels=true \
   -p useSeperateModelProject=true \

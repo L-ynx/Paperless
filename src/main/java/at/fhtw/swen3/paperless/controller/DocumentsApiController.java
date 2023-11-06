@@ -1,13 +1,17 @@
 package at.fhtw.swen3.paperless.controller;
 
 import at.fhtw.swen3.paperless.services.dto.*;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.annotation.Generated;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +35,16 @@ public class DocumentsApiController implements DocumentsApi {
     @Override
     public Optional<NativeWebRequest> getRequest() {
         return Optional.ofNullable(request);
+    }
+
+    @Override
+    public ResponseEntity<Void> apiCorrespondentsGet(Integer page, Integer pageSize) {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> apiTagsGet(Integer page, Integer pageSize) {
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
