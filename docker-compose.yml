@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   paperless-frontend:
     container_name: paperless-frontend
