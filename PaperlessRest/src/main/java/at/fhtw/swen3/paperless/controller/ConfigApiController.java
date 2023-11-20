@@ -42,7 +42,6 @@ public class ConfigApiController implements ConfigApi {
     @Override
     public ResponseEntity<Void> deleteStoragePath(Integer id) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
     }
 
     @Override

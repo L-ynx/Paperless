@@ -36,3 +36,4 @@ services:
 
 volumes:
   paperless-db-data:
+    driver: local
