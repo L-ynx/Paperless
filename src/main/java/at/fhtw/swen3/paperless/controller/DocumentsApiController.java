@@ -83,6 +83,7 @@ public class DocumentsApiController implements DocumentsApi {
 
     @Override
     public ResponseEntity<Void> uploadDocument(String title, OffsetDateTime created, Integer documentType, List<Integer> tags, Integer correspondent, List<MultipartFile> document) {
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
