@@ -16,7 +16,7 @@ import java.util.Optional;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-23T11:25:43.450871Z[Etc/UTC]")
 @Controller
 @RequestMapping("${openapi.paperlessRestServer.base-path:}")
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:8080")
 public class ConfigApiController implements ConfigApi {
 
     private final NativeWebRequest request;
@@ -75,6 +75,12 @@ public class ConfigApiController implements ConfigApi {
     @Override
     public ResponseEntity<GetUISettings200Response> getUISettings() {
         GetUISettings200Response response = new GetUISettings200Response();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<GetSavedViews200Response> getSavedViews(Integer page, Integer pageSize) {
+        GetSavedViews200Response response = new GetSavedViews200Response();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

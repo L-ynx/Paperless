@@ -18,5 +18,6 @@ public interface MapStructMapper {
     @Mapping(target = "name", source = "name")
     @Mapping(target = "matchingAlgorithm", source = "matchingAlgorithm")
     @Mapping(target = "isInsensitive", source = "insensitive")
+    @Mapping(target = "documents", ignore = true)
     DocumentType toEntity(DocumentTypeDTO documentTypeDTO);
 }
