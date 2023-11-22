@@ -1,8 +1,11 @@
 package at.fhtw.swen3.paperless.controller;
 
+import at.fhtw.swen3.paperless.services.dto.CreateDocumentType200Response;
+import at.fhtw.swen3.paperless.services.dto.CreateDocumentTypeRequest;
+import at.fhtw.swen3.paperless.services.dto.UpdateDocumentType200Response;
+import at.fhtw.swen3.paperless.services.dto.UpdateDocumentTypeRequest;
 import at.fhtw.swen3.persistence.service.DocumentTypeService;
 import at.fhtw.swen3.persistence.service.dto.DocumentTypeDTO;
-import at.fhtw.swen3.paperless.services.dto.*;
 import jakarta.annotation.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +15,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import java.util.Collections;
 import java.util.Optional;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-23T11:25:43.450871Z[Etc/UTC]")
@@ -44,36 +46,36 @@ public class DocumentTypesApiController implements DocumentTypesApi {
         DocumentTypeDTO result = service.create(dto);
         CreateDocumentType200Response response = new CreateDocumentType200Response();
         response.setId((int) result.getId());
-        response.setSlug("slug");
+        response.setSlug(result.getName());
         response.setName(result.getName());
-        response.setMatch("match");
-        response.setMatchingAlgorithm(0);
-        response.setIsInsensitive(true);
+        response.setMatch(result.getName());
+        response.setMatchingAlgorithm((int) result.getMatchingAlgorithm());
+        response.setIsInsensitive(result.isInsensitive());
         response.setOwner(0);
         response.userCanChange(true);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<GetDocumentTypes200Response> getDocumentTypes(Integer page, Boolean fullPerms) {
-        GetDocumentTypes200ResponseResultsInner inner = new GetDocumentTypes200ResponseResultsInner();
-        inner.setId(0);
-        inner.setSlug("slug");
-        inner.setName("name");
-        inner.setMatch("match");
-        inner.setMatchingAlgorithm(0);
-        inner.setIsInsensitive(true);
-        inner.setOwner(0);
-        inner.permissions(new UpdateDocumentRequestPermissions());
-
-        GetDocumentTypes200Response response = new GetDocumentTypes200Response();
-        response.setCount(0);
-        response.setNext(0);
-        response.setPrevious(0);
-        response.setAll(Collections.singletonList(0));
-        response.setResults(Collections.singletonList(inner));
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    @Override
+//    public ResponseEntity<GetDocumentTypes200Response> getDocumentTypes(Integer page, Boolean fullPerms) {
+//        GetDocumentTypes200ResponseResultsInner inner = new GetDocumentTypes200ResponseResultsInner();
+//        inner.setId(0);
+//        inner.setSlug("slug");
+//        inner.setName("name");
+//        inner.setMatch("match");
+//        inner.setMatchingAlgorithm(0);
+//        inner.setIsInsensitive(true);
+//        inner.setOwner(0);
+//        inner.permissions(new UpdateDocumentRequestPermissions());
+//
+//        GetDocumentTypes200Response response = new GetDocumentTypes200Response();
+//        response.setCount(0);
+//        response.setNext(0);
+//        response.setPrevious(0);
+//        response.setAll(Collections.singletonList(0));
+//        response.setResults(Collections.singletonList(inner));
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
     @Override
     public ResponseEntity<Void> deleteDocumentType(Integer id) {

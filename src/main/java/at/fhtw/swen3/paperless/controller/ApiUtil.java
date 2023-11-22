@@ -1,8 +1,8 @@
 package at.fhtw.swen3.paperless.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ApiUtil {
@@ -11,7 +11,6 @@ public class ApiUtil {
             HttpServletResponse res = req.getNativeResponse(HttpServletResponse.class);
             res.setCharacterEncoding("UTF-8");
             res.addHeader("Content-Type", contentType);
-            res.addHeader("Access-Control-Allow-Origin", "*");
             res.getWriter().print(example);
         } catch (IOException e) {
             throw new RuntimeException(e);

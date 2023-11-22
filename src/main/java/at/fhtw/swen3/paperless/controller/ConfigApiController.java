@@ -72,17 +72,6 @@ public class ConfigApiController implements ConfigApi {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<GetUISettings200Response> getUISettings() {
-        GetUISettings200Response response = new GetUISettings200Response();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<GetSavedViews200Response> getSavedViews(Integer page, Integer pageSize) {
-        GetSavedViews200Response response = new GetSavedViews200Response();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 
 
 }

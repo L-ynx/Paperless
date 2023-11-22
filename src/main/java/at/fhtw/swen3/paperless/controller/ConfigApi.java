@@ -124,7 +124,7 @@ public interface ConfigApi {
     )
     
     default ResponseEntity<CreateUISettings200Response> createUISettings(
-        @Parameter(name = "CreateUISettingsRequest", description = "") @Valid @RequestBody(required = false) CreateUISettingsRequest createUISettingsRequest
+        @Parameter(name = "CreateUISettingsRequest", description = "") @RequestBody(required = false) CreateUISettingsRequest createUISettingsRequest
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
