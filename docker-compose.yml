@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   paperless-frontend:
     container_name: paperless-frontend
@@ -6,9 +8,8 @@ services:
       dockerfile: PaperlessWebUI/Dockerfile
     image: paperless-frontend:nginx
     ports:
-      - 8080:80
-    depends_on:
-      - paperless-db
+      - "8080:80"
+
   paperless-rest:
     container_name: paperless-rest-server
     build:
@@ -16,21 +17,22 @@ services:
       dockerfile: Dockerfile
     image: paperless-rest-server:latest
     ports:
-      - 8081:8081
+      - "8081:8081"
     depends_on:
       - paperless-db
 
   paperless-db:
-    image: postgres
-    restart: always
+    container_name: paperless-postgres
+    image: postgres:latest
     ports:
       - "5432:5432"
-    volumes:
-      - paperless_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: paperless_db
+      POSTGRES_DB: paperlessdb  # The name of the database to be created
+      POSTGRES_USER: admin      # The username for the database
+      POSTGRES_PASSWORD: admin  # The password for the user
+    volumes:
+      - paperless-db-data:/var/lib/postgresql/data
 
 volumes:
-    paperless_data:
+  paperless-db-data:
+    driver: local

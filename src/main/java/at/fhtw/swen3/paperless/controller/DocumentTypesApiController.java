@@ -1,5 +1,7 @@
 package at.fhtw.swen3.paperless.controller;
 
+import at.fhtw.swen3.persistence.service.DocumentTypeService;
+import at.fhtw.swen3.persistence.service.dto.DocumentTypeDTO;
 import at.fhtw.swen3.paperless.services.dto.*;
 import jakarta.annotation.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,12 @@ import java.util.Optional;
 public class DocumentTypesApiController implements DocumentTypesApi {
 
     private final NativeWebRequest request;
+    private final DocumentTypeService service;
 
     @Autowired
-    public DocumentTypesApiController(NativeWebRequest request) {
+    public DocumentTypesApiController(NativeWebRequest request, DocumentTypeService service) {
         this.request = request;
+        this.service = service;
     }
 
     @Override
@@ -33,10 +37,15 @@ public class DocumentTypesApiController implements DocumentTypesApi {
 
     @Override
     public ResponseEntity<CreateDocumentType200Response> createDocumentType(CreateDocumentTypeRequest createDocumentTypeRequest) {
+        DocumentTypeDTO dto = DocumentTypeDTO.builder()
+                .name(createDocumentTypeRequest.getName())
+                .matchingAlgorithm(createDocumentTypeRequest.getMatchingAlgorithm())
+                .isInsensitive(createDocumentTypeRequest.getIsInsensitive()).build();
+        DocumentTypeDTO result = service.create(dto);
         CreateDocumentType200Response response = new CreateDocumentType200Response();
-        response.setId(0);
+        response.setId((int) result.getId());
         response.setSlug("slug");
-        response.setName("name");
+        response.setName(result.getName());
         response.setMatch("match");
         response.setMatchingAlgorithm(0);
         response.setIsInsensitive(true);

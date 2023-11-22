@@ -1,21 +1,15 @@
 package at.fhtw.swen3.paperless.services;
 
+import at.fhtw.swen3.paperless.config.SpringDocConfiguration;
 import com.fasterxml.jackson.databind.Module;
 import org.openapitools.jackson.nullable.JsonNullableModule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator;
 
-@SpringBootApplication(
-    nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
-)
-@ComponentScan(
-    basePackages = {"at.fhtw.swen3.paperless.services", "at.fhtw.swen3.paperless.controller" , "at.fhtw.swen3.paperless.config"},
-    nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
-)
+@SpringBootApplication
+@EnableConfigurationProperties(SpringDocConfiguration.class)
 public class OpenApiGeneratorApplication {
 
     public static void main(String[] args) {
