@@ -62,7 +62,7 @@ public interface DocumentsApi {
             @Parameter(name = "page", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page", required = false) Integer page,
             @Parameter(name = "page_size", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page_size", required = false) Integer pageSize
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
@@ -90,7 +90,7 @@ public interface DocumentsApi {
             @Parameter(name = "page", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page", required = false) Integer page,
             @Parameter(name = "page_size", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page_size", required = false) Integer pageSize
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
