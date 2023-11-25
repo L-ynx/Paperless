@@ -1,7 +1,6 @@
-package at.fhtw.swen3.persistence;
+package at.fhtw.swen3.persistence.repository;
 
 import at.fhtw.swen3.persistence.entity.Document;
-import at.fhtw.swen3.persistence.repository.DocumentRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
