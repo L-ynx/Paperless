@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.config.name=application-test")
 public class DatabaseMapperTest {
 
     private final DatabaseMapper mapper;
