@@ -1,21 +1,19 @@
-package at.fhtw.swen3.persistence.entity;
+package at.fhtw.swen3.persistence.service.dto;
 
-import jakarta.persistence.*;
+import at.fhtw.swen3.persistence.entity.Document;
 import lombok.*;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class DocTag {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Component
+public class DocTagDTO {
     private long id;
-
     private String slug;
     private String name;
     private String color;
@@ -24,7 +22,5 @@ public class DocTag {
     private boolean isInsensitive;
     private boolean isInboxTag;
     private long documentCount;
-
-    @ManyToMany
     private List<Document> documents;
 }

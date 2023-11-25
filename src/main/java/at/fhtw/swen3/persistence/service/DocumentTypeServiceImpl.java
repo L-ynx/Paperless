@@ -1,7 +1,7 @@
 package at.fhtw.swen3.persistence.service;
 
 import at.fhtw.swen3.persistence.entity.DocumentType;
-import at.fhtw.swen3.persistence.mapper.MapStructMapper;
+import at.fhtw.swen3.persistence.mapper.DatabaseMapper;
 import at.fhtw.swen3.persistence.repository.DocumentTypeRepository;
 import at.fhtw.swen3.persistence.service.dto.DocumentTypeDTO;
 import jakarta.persistence.EntityNotFoundException;
@@ -14,28 +14,28 @@ import java.util.List;
 public class DocumentTypeServiceImpl implements DocumentTypeService {
 
     private final DocumentTypeRepository documentTypeRepository;
-    protected final MapStructMapper mapStructMapper;
+    protected final DatabaseMapper databaseMapper;
 
     @Autowired
     public DocumentTypeServiceImpl(
             DocumentTypeRepository documentTypeRepository,
-            MapStructMapper mapStructMapper
+            DatabaseMapper databaseMapper
     ) {
         this.documentTypeRepository = documentTypeRepository;
-        this.mapStructMapper = mapStructMapper;
+        this.databaseMapper = databaseMapper;
     }
 
     public DocumentTypeDTO create(DocumentTypeDTO documentTypeDTO) {
-        DocumentType documentType = mapStructMapper.toEntity(documentTypeDTO);
+        DocumentType documentType = databaseMapper.toEntity(documentTypeDTO);
         DocumentType savedDocumentType = documentTypeRepository.save(documentType);
-        return mapStructMapper.toDTO(savedDocumentType);
+        return databaseMapper.toDTO(savedDocumentType);
     }
 
     public DocumentTypeDTO findById(Long id) {
         DocumentType documentType = documentTypeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("DocumentType not found with id: " + id));
 
-        return mapStructMapper.toDTO(documentType);
+        return databaseMapper.toDTO(documentType);
     }
 
     @Override

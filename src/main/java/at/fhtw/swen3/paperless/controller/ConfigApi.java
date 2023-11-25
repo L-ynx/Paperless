@@ -291,9 +291,7 @@ public interface ConfigApi {
         produces = { "application/json" }
     )
     
-    default ResponseEntity<GetUISettings200Response> getUISettings(
-        
-    ) {
+    default ResponseEntity<GetUISettings200Response> getUISettings() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

@@ -1,8 +1,10 @@
 package at.fhtw.swen3.persistence.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
-
-import jakarta.persistence.*;
 @Entity
 @Getter
 @Setter
@@ -11,7 +13,7 @@ import jakarta.persistence.*;
 @Builder
 public class Statistics {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private long documentsTotalCount;
