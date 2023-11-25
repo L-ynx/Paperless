@@ -1,34 +1,26 @@
-package at.fhtw.swen3.persistence.entity;
+package at.fhtw.swen3.persistence.service.dto;
 
-import jakarta.persistence.*;
+import at.fhtw.swen3.persistence.entity.Correspondent;
+import at.fhtw.swen3.persistence.entity.DocTag;
+import at.fhtw.swen3.persistence.entity.DocumentType;
 import lombok.*;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class Document {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Component
+public class DocumentDTO {
     private int id;
-
     private String title;
     private String content;
     private LocalDateTime createdAt;
-
-    @ManyToOne
-    @JoinColumn(name = "correspondent_id")
     private Correspondent correspondent;
-
-    @ManyToOne
-    @JoinColumn(name = "document_type_id")
     private DocumentType documentType;
-
-    @ManyToMany
     private List<DocTag> docTags;
 }

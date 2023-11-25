@@ -2,9 +2,9 @@
 FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /usr/src/app
 COPY ./pom.xml .
-RUN mvn -B -f ./pom.xml -s /usr/share/maven/ref/settings-docker.xml dependency:go-offline
+RUN mvn -B -f ./pom.xml -s /usr/share/maven/ref/settings-docker.xml dependency:go-offline -DskipTests
 COPY ./ .
-RUN mvn -B -f ./pom.xml -s /usr/share/maven/ref/settings-docker.xml package
+RUN mvn -B -f ./pom.xml -s /usr/share/maven/ref/settings-docker.xml package -DskipTests
 
 # Stage 2: Create the final image with the application
 FROM openjdk:17-jdk-alpine

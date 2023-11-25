@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 public class Correspondent {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private long matchingAlgorithm;

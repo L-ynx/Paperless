@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-23T11:25:43.450871Z[Etc/UTC]")
@@ -72,6 +73,30 @@ public class ConfigApiController implements ConfigApi {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<GetSavedViews200Response> getSavedViews(Integer page,Integer pageSize) {
+        GetSavedViews200ResponseResultsInner inner = new GetSavedViews200ResponseResultsInner();
+        inner.setName("TestName");
+        inner.showOnDashboard(true);
+        inner.userCanChange(false);
+        inner.sortField("TestSortField");
+        inner.showInSidebar(true);
+        GetSavedViews200Response response = new GetSavedViews200Response(1, 1, 1,List.of(5,5 ), List.of(inner));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<GetUISettings200Response> getUISettings() {
+        GetUISettings200Response response = new GetUISettings200Response();
+        response.setDisplayName("PaperlessProjectUser");
+        GetUISettings200ResponseUser user = new GetUISettings200ResponseUser();
+        user.setId(1);
+        user.username("username");
+        user.isSuperuser(true);
+
+        response.user(user);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 
 }

@@ -1,8 +1,8 @@
 package at.fhtw.swen3.persistence.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class DocumentType {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
