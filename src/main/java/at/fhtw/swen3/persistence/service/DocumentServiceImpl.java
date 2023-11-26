@@ -1,5 +1,6 @@
 package at.fhtw.swen3.persistence.service;
 
+import at.fhtw.swen3.paperless.config.SpringDocConfiguration;
 import at.fhtw.swen3.persistence.entity.Document;
 import at.fhtw.swen3.persistence.mapper.DatabaseMapper;
 import at.fhtw.swen3.persistence.repository.DocumentRepository;
@@ -7,9 +8,11 @@ import at.fhtw.swen3.persistence.service.dto.CorrespondentDTO;
 import at.fhtw.swen3.persistence.service.dto.DocTagDTO;
 import at.fhtw.swen3.persistence.service.dto.DocumentDTO;
 import at.fhtw.swen3.persistence.service.dto.DocumentTypeDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -22,13 +25,16 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class DocumentServiceImpl implements DocumentService {
     static final Logger LOGGER = LoggerFactory.getLogger(DocumentServiceImpl.class);
+    final AtomicInteger messageCount = new AtomicInteger(0);
 
-    private final AmqpTemplate rabbitTemplate;
+    private final RabbitTemplate rabbitTemplate;
     private final DocumentRepository repository;
     private final DocumentTypeService documentTypeService;
     private final CorrespondentService correspondentService;
@@ -36,7 +42,7 @@ public class DocumentServiceImpl implements DocumentService {
     protected final DatabaseMapper mapper;
 
     @Autowired
-    public DocumentServiceImpl(AmqpTemplate rabbitTemplate, DocumentRepository repository, DocumentTypeService documentTypeService, CorrespondentService correspondentService, DocTagService docTagService, DatabaseMapper mapper) {
+    public DocumentServiceImpl(RabbitTemplate rabbitTemplate, DocumentRepository repository, DocumentTypeService documentTypeService, CorrespondentService correspondentService, DocTagService docTagService, DatabaseMapper mapper) {
         this.rabbitTemplate = rabbitTemplate;
         this.repository = repository;
         this.documentTypeService = documentTypeService;
@@ -79,10 +85,18 @@ public class DocumentServiceImpl implements DocumentService {
 
         repository.save(document);
         LOGGER.info("Document created: {}", document.getTitle());
-        if (documents != null && !documents.isEmpty()) {
-            rabbitTemplate.convertAndSend("rabbitExchange", "rabbitQueue", documents.stream().map(MultipartFile::getOriginalFilename).collect(Collectors.toList()));
-            LOGGER.info("Message sent to RabbitMQ");
+        for (MultipartFile multipartFile : documents) {
+            processMessage(multipartFile.getOriginalFilename());
         }
+    }
+
+    @RabbitListener(queues = SpringDocConfiguration.ECHO_IN_QUEUE_NAME)
+    private void processMessage(String documents) {
+        rabbitTemplate.convertAndSend(SpringDocConfiguration.EXCHANGE, SpringDocConfiguration.ECHO_OUT_QUEUE_NAME, documents, message -> {
+            message.getMessageProperties().getHeaders().put(SpringDocConfiguration.ECHO_MESSAGE_COUNT_PROPERTY_NAME, messageCount.incrementAndGet());
+            return message;
+        });
+        LOGGER.info("Message {} sent to RabbitMQ", messageCount.get());
     }
 
     @Override

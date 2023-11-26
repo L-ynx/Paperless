@@ -20,6 +20,7 @@ services:
       - "8081:8081"
     depends_on:
       - paperless-db
+      - rabbitmq
 
   paperless-db:
     container_name: paperless-postgres
