@@ -12,4 +12,6 @@ public interface DocumentService {
     List<DocumentDTO> findAll();
 
     void create(String title, OffsetDateTime created, Integer documentType, List<Integer> tags, Integer correspondent, List<MultipartFile> document);
+
+    byte[] getThumbnail(Integer id);
 }

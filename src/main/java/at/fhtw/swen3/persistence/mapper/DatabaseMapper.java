@@ -108,4 +108,8 @@ public interface DatabaseMapper {
 
     List<DocumentDTO> toDTOs(List<Document> documents);
 
+    List<DocTagDTO> toDocTagDTOs(List<DocTag> docTags);
+
+    List<DocTag> toDocTagsEntity(List<DocTagDTO> docTagDTOs);
+
 }

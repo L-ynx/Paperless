@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,10 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -128,18 +123,7 @@ public class DocumentsApiController implements DocumentsApi {
 
     @Override
     public ResponseEntity<ByteArrayResource> getDocumentThumb(Integer id) {
-        LOGGER.info("GET /api/documents/{id}/thumbnail " + id);
-
-        byte[] imageBytes = new byte[0];
-        try {
-            BufferedImage image = ImageIO.read(new ClassPathResource("Images/pic.jpeg").getInputStream());
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(image, "jpeg", baos);
-            baos.flush();
-            imageBytes = baos.toByteArray();
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage());
-        }
+        byte[] imageBytes = documentService.getThumbnail(id);
         ByteArrayResource resource = new ByteArrayResource(imageBytes);
 
         HttpHeaders headers = new HttpHeaders();
