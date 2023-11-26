@@ -702,6 +702,38 @@ paths:
       x-accepts: application/json
       x-tags:
         - tag: Documents
+  /api/documents/{id}/thumb/:
+      get:
+        operationId: GetDocumentThumb
+        parameters:
+          - explode: false
+            in: path
+            name: id
+            required: true
+            schema:
+              format: int32
+              type: integer
+            style: simple
+        responses:
+          '200':
+            description: Success
+            content:
+              image/jpeg:
+                schema:
+                  type: string
+                  format: binary
+              image/png:
+                schema:
+                  type: string
+                  format: binary
+              image/jpg:
+                schema:
+                  type: string
+                  format: binary
+        tags:
+          - Documents
+        x-tags:
+          - tag: DocumentTypes
   /api/document_types:
     get:
       operationId: GetDocumentTypes

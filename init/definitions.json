@@ -1,0 +1,83 @@
+{
+  "queues": [
+    {
+      "name": "rabbitQueue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "rabbitExchange",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "rabbitExchange",
+      "vhost": "/",
+      "destination": "rabbitQueue",
+      "destination_type": "queue",
+      "routing_key": "rabbitQueueKey",
+      "arguments": {}
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "users": [
+    {
+      "name": "admin",
+      "password": "admin",
+      "tags": "administrator"
+    },
+    {
+      "name": "tester",
+      "password": "tester",
+      "tags": "administrator"
+    }
+  ],
+  "topic_permissions": [
+    {
+      "user": "admin",
+      "vhost": "/",
+      "exchange": "rabbitExchange",
+      "write": ".*",
+      "read": ".*"
+    },
+    {
+      "user": "tester",
+      "vhost": "/",
+      "exchange": "rabbitExchange",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+    "permissions": [
+        {
+        "user": "admin",
+        "vhost": "/",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+        },
+        {
+        "user": "tester",
+        "vhost": "/",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+        }
+    ]
+}

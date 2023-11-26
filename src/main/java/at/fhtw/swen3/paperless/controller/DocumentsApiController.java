@@ -1,11 +1,19 @@
 package at.fhtw.swen3.paperless.controller;
 
+import at.fhtw.swen3.paperless.exceptions.RabbitMQException;
+import at.fhtw.swen3.paperless.exceptions.RestServerException;
 import at.fhtw.swen3.paperless.services.dto.*;
 import at.fhtw.swen3.persistence.service.DocumentService;
 import at.fhtw.swen3.persistence.service.dto.DocumentDTO;
 import jakarta.annotation.Generated;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,11 +21,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-23T11:25:43.450871Z[Etc/UTC]")
 @Controller
@@ -25,8 +36,7 @@ import java.util.logging.Logger;
 @CrossOrigin(origins = "http://localhost:8080")
 public class DocumentsApiController implements DocumentsApi {
 
-    Logger LOG = Logger.getLogger(DocumentsApiController.class.getName());
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(DocumentsApiController.class);
     private final NativeWebRequest request;
     private final DocumentService documentService;
 
@@ -78,7 +88,7 @@ public class DocumentsApiController implements DocumentsApi {
         GetDocuments200Response response = new GetDocuments200Response();
         response.setCount(documents.size());
         List<GetDocuments200ResponseResultsInner> innerResults = new ArrayList<>();
-        for (DocumentDTO documentDTO: documents) {
+        for (DocumentDTO documentDTO : documents) {
             GetDocuments200ResponseResultsInner inner = new GetDocuments200ResponseResultsInner();
             inner.id(documentDTO.getId());
             inner.title(documentDTO.getTitle());
@@ -102,16 +112,40 @@ public class DocumentsApiController implements DocumentsApi {
     }
 
     @Override
-    public ResponseEntity<Void> uploadDocument(String title, OffsetDateTime created, Integer documentType, List<Integer> tags, Integer correspondent, List<MultipartFile> document) {
-        try{
+    public ResponseEntity<String> uploadDocument(String title, OffsetDateTime created, Integer documentType, List<Integer> tags, Integer correspondent, List<MultipartFile> document) {
+        try {
             documentService.create(title, created, documentType, tags, correspondent, document);
-
-        } catch (Exception e){
-            LOG.severe(e.getMessage());
+            LOGGER.info("Document uploaded successfully");
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }  catch (RabbitMQException ex) {
+            LOGGER.error("Error sending message to RabbitMQ", ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        } catch (RestServerException ex) {
+            LOGGER.error("Error uploading document", ex);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @Override
+    public ResponseEntity<ByteArrayResource> getDocumentThumb(Integer id) {
+        LOGGER.info("GET /api/documents/{id}/thumbnail " + id);
+
+        byte[] imageBytes = new byte[0];
+        try {
+            BufferedImage image = ImageIO.read(new ClassPathResource("Images/pic.jpeg").getInputStream());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(image, "jpeg", baos);
+            baos.flush();
+            imageBytes = baos.toByteArray();
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
+        ByteArrayResource resource = new ByteArrayResource(imageBytes);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        headers.setContentLength(imageBytes.length);
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 
 }

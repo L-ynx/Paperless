@@ -7,15 +7,22 @@ import at.fhtw.swen3.persistence.repository.DocTagRepository;
 import at.fhtw.swen3.persistence.repository.DocumentRepository;
 import at.fhtw.swen3.persistence.repository.DocumentTypeRepository;
 import at.fhtw.swen3.persistence.service.dto.DocumentDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class DocumentServiceImpl implements DocumentService{
+public class DocumentServiceImpl implements DocumentService {
+    static final Logger LOGGER = LoggerFactory.getLogger(DocumentServiceImpl.class);
+
+    private final AmqpTemplate rabbitTemplate;
     private final DocumentRepository repository;
     private final DocumentTypeRepository documentTypeRepository;
     private final CorrespondentRepository correspondentRepository;
@@ -24,7 +31,8 @@ public class DocumentServiceImpl implements DocumentService{
     protected final DatabaseMapper mapper;
 
     @Autowired
-    public DocumentServiceImpl(DocumentRepository repository, DocumentTypeRepository documentTypeRepository, CorrespondentRepository correspondentRepository, DocTagRepository docTagRepository, DatabaseMapper mapper) {
+    public DocumentServiceImpl(AmqpTemplate rabbitTemplate, DocumentRepository repository, DocumentTypeRepository documentTypeRepository, CorrespondentRepository correspondentRepository, DocTagRepository docTagRepository, DatabaseMapper mapper) {
+        this.rabbitTemplate = rabbitTemplate;
         this.repository = repository;
         this.documentTypeRepository = documentTypeRepository;
         this.correspondentRepository = correspondentRepository;
@@ -60,5 +68,7 @@ public class DocumentServiceImpl implements DocumentService{
                 .build();
 
         repository.save(document);
+        rabbitTemplate.convertAndSend("rabbitExchange", "rabbitQueue", documents.stream().map(MultipartFile::getOriginalFilename).collect(Collectors.toList()));
+        LOGGER.info("Message sent to RabbitMQ");
     }
 }

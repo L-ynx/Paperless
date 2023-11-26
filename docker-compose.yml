@@ -33,6 +33,19 @@ services:
     volumes:
       - paperless-db-data:/var/lib/postgresql/data
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "9093:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+      - rabbitmq-log:/var/log/rabbitmq
+      - ./init/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./init/definitions.json:/etc/rabbitmq/definitions.json
+
 volumes:
   paperless-db-data:
-    driver: local
+  rabbitmq-data:
+  rabbitmq-log:

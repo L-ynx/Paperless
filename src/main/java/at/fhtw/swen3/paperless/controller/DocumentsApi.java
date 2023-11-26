@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Generated;
 import jakarta.validation.Valid;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -320,7 +322,7 @@ public interface DocumentsApi {
         consumes = { "multipart/form-data" }
     )
 
-    default ResponseEntity<Void> uploadDocument(
+    default ResponseEntity<String> uploadDocument(
             @Parameter(name = "title", description = "") @Valid @RequestParam(value = "title", required = false) String title,
             @Parameter(name = "created", description = "") @Valid @RequestParam(value = "created", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime created,
             @Parameter(name = "document_type", description = "") @Valid @RequestParam(value = "document_type", required = false) Integer documentType,
@@ -330,6 +332,35 @@ public interface DocumentsApi {
     ) {
         return new ResponseEntity<>(HttpStatus.OK);
 
+    }
+
+    /**
+     * GET /api/documents/{id}/thumb
+     *
+     * @param id  (required)
+     * @return Success (status code 200)
+     */
+    @Operation(
+            operationId = "getDocumentThumb",
+            tags = { "Documents" },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Success", content = {
+                            @Content(mediaType = "image/jpeg", schema = @Schema(implementation = Resource.class)),
+                            @Content(mediaType = "image/png", schema = @Schema(implementation = Resource.class)),
+                            @Content(mediaType = "image/jpg", schema = @Schema(implementation = Resource.class))
+                    })
+            }
+    )
+    @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/api/documents/{id}/thumb/",
+            produces = { "image/jpeg", "image/png", "image/jpg" }
+    )
+
+    default ResponseEntity<ByteArrayResource> getDocumentThumb(
+            @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id
+    ) {
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
