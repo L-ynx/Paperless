@@ -69,8 +69,20 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public void create(String title, OffsetDateTime created, Integer documentType, List<Integer> tags, Integer correspondent, List<MultipartFile> documents) {
-        DocumentTypeDTO type = documentTypeService.findById(Long.valueOf(documentType));
-        CorrespondentDTO correspondentEntity = correspondentService.findById(Long.valueOf(correspondent));
+        DocumentTypeDTO type = null;
+        CorrespondentDTO correspondentEntity = null;
+        if (documentType != null)
+            type = documentTypeService.findById(Long.valueOf(documentType));
+
+        if (correspondent != null)
+            correspondentEntity = correspondentService.findById(Long.valueOf(correspondent));
+
+        if (created == null)
+            created = OffsetDateTime.now();
+
+        if (title == null)
+            title = documents.get(0).getOriginalFilename();
+
         List<DocTagDTO> tagEntities = new ArrayList<>();
         if (tags != null && !tags.isEmpty())
             tagEntities = docTagService.findAllById(tags.stream().map(Long::valueOf).collect(Collectors.toList()));
