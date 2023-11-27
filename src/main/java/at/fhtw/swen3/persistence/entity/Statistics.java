@@ -14,7 +14,7 @@ import lombok.*;
 public class Statistics {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     private long documentsTotalCount;
     private long documentsInboxCount;

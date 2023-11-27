@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @Component
 public class DocumentDTO {
-    private int id;
+    private long id;
     private String title;
     private String content;
     private LocalDateTime createdAt;

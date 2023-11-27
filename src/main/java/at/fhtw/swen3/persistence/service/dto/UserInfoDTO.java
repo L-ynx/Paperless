@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Builder
 @Component
 public class UserInfoDTO {
-    private int id;
+    private long id;
     private String username;
     private String password;
 }

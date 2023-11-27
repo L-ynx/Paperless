@@ -85,7 +85,7 @@ public class DocumentsApiController implements DocumentsApi {
         List<GetDocuments200ResponseResultsInner> innerResults = new ArrayList<>();
         for (DocumentDTO documentDTO : documents) {
             GetDocuments200ResponseResultsInner inner = new GetDocuments200ResponseResultsInner();
-            inner.id(documentDTO.getId());
+            inner.id((int) documentDTO.getId());
             inner.title(documentDTO.getTitle());
             inner.content(documentDTO.getContent());
             inner.created(documentDTO.getCreatedAt().toString());
@@ -112,7 +112,7 @@ public class DocumentsApiController implements DocumentsApi {
             documentService.create(title, created, documentType, tags, correspondent, document);
             LOGGER.info("Document uploaded successfully");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }  catch (RabbitMQException ex) {
+        } catch (RabbitMQException ex) {
             LOGGER.error("Error sending message to RabbitMQ", ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         } catch (RestServerException ex) {

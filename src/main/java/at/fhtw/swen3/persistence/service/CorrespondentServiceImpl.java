@@ -25,11 +25,12 @@ public class CorrespondentServiceImpl implements CorrespondentService{
     @Override
     public CorrespondentDTO findById(Long id) {
         try {
+            if (id == null) throw new EntityNotFoundException();
             Correspondent correspondent = repository.findById(id).orElseThrow(EntityNotFoundException::new);
             LOGGER.info("Correspondent found: {}", correspondent);
             return mapper.toDTO(correspondent);
         } catch (EntityNotFoundException e) {
-            LOGGER.error("Correspondent not found with id: {}", id);
+            LOGGER.warn("Correspondent not found with id: {}", id);
             return null;
         }
     }

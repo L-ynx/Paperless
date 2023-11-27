@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Builder
 @Component
 public class StatisticsDTO {
-    private int id;
+    private long id;
     private long documentsTotalCount;
     private long documentsInboxCount;
     private long inboxTagCount;

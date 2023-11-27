@@ -22,8 +22,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -69,27 +69,13 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public void create(String title, OffsetDateTime created, Integer documentType, List<Integer> tags, Integer correspondent, List<MultipartFile> documents) {
-        DocumentTypeDTO type = null;
-        CorrespondentDTO correspondentEntity = null;
-        if (documentType != null)
-            type = documentTypeService.findById(Long.valueOf(documentType));
-
-        if (correspondent != null)
-            correspondentEntity = correspondentService.findById(Long.valueOf(correspondent));
-
-        if (created == null)
-            created = OffsetDateTime.now();
-
-        if (title == null)
-            title = documents.get(0).getOriginalFilename();
-
-        List<DocTagDTO> tagEntities = new ArrayList<>();
-        if (tags != null && !tags.isEmpty())
-            tagEntities = docTagService.findAllById(tags.stream().map(Long::valueOf).collect(Collectors.toList()));
+        DocumentTypeDTO type = documentTypeService.findById(documentType == null ? null : Long.valueOf(documentType));
+        CorrespondentDTO correspondentEntity = correspondentService.findById(correspondent == null ? null : Long.valueOf(correspondent));
+        List<DocTagDTO> tagEntities = docTagService.findAllById(tags == null ? null : tags.stream().map(Long::valueOf).collect(Collectors.toList()));
 
         Document document = Document.builder()
-                .title(title)
-                .createdAt(created.toLocalDateTime())
+                .title(title == null ? documents.get(0).getOriginalFilename() : title)
+                .createdAt(created == null ? LocalDateTime.now() : created.toLocalDateTime())
                 .documentType(mapper.toEntity(type))
                 .correspondent(mapper.toEntity(correspondentEntity))
                 .docTags(mapper.toDocTagsEntity(tagEntities))
@@ -122,7 +108,7 @@ public class DocumentServiceImpl implements DocumentService {
             imageBytes = baos.toByteArray();
             LOGGER.info("Thumbnail for id: {} found ", id);
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.warn(e.getMessage());
         }
         return imageBytes;
     }

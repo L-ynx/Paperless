@@ -19,7 +19,7 @@ import lombok.*;
 public class UserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @NotNull(message = "Username is required")
     @NotBlank(message = "Username is required")

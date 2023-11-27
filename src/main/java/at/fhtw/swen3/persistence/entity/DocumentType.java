@@ -14,7 +14,7 @@ import java.util.List;
 public class DocumentType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     private String name;
     private long matchingAlgorithm;

@@ -34,18 +34,19 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
             LOGGER.info("DocumentType saved: {}", savedDocumentType);
             return databaseMapper.toDTO(savedDocumentType);
         } catch (Exception e) {
-            LOGGER.info("DocumentType not saved with name: {}", documentTypeDTO.getName());
+            LOGGER.warn("DocumentType not saved with name: {}", documentTypeDTO.getName());
             return null;
         }
     }
 
     public DocumentTypeDTO findById(Long id) {
         try {
+            if (id == null) throw new EntityNotFoundException();
             DocumentType documentType = documentTypeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
             LOGGER.info("DocumentType found: {}", documentType);
             return databaseMapper.toDTO(documentType);
         } catch (EntityNotFoundException e) {
-            LOGGER.error("DocumentType not found with id: {}", id);
+            LOGGER.warn("DocumentType not found with id: {}", id);
             return null;
         }
     }
