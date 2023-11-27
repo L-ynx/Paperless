@@ -3,6 +3,7 @@ version: '3.8'
 services:
   paperless-frontend:
     container_name: paperless-frontend
+    platform: linux/amd64
     build:
       context: .
       dockerfile: PaperlessWebUI/Dockerfile
@@ -12,6 +13,7 @@ services:
 
   paperless-rest:
     container_name: paperless-rest-server
+    platform: linux/amd64
     build:
       context: .
       dockerfile: Dockerfile
