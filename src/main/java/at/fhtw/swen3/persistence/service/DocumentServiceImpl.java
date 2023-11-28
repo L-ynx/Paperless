@@ -11,7 +11,6 @@ import at.fhtw.swen3.persistence.service.dto.DocumentTypeDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -88,7 +87,6 @@ public class DocumentServiceImpl implements DocumentService {
         }
     }
 
-    @RabbitListener(queues = SpringDocConfiguration.QUEUE)
     private void processMessage(String documents) {
         rabbitTemplate.convertAndSend(SpringDocConfiguration.EXCHANGE, SpringDocConfiguration.QUEUE_KEY, documents, message -> {
             message.getMessageProperties().getHeaders().put(SpringDocConfiguration.ECHO_MESSAGE_COUNT_PROPERTY_NAME, messageCount.incrementAndGet());
