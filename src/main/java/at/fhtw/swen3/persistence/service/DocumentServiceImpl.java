@@ -31,8 +31,8 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class DocumentServiceImpl implements DocumentService {
-    static final Logger LOGGER = LoggerFactory.getLogger(DocumentServiceImpl.class);
-    final AtomicInteger messageCount = new AtomicInteger(0);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DocumentServiceImpl.class);
+    private final AtomicInteger messageCount = new AtomicInteger(0);
 
     private final RabbitTemplate rabbitTemplate;
     private final DocumentRepository repository;
@@ -88,9 +88,9 @@ public class DocumentServiceImpl implements DocumentService {
         }
     }
 
-    @RabbitListener(queues = SpringDocConfiguration.ECHO_IN_QUEUE_NAME)
+    @RabbitListener(queues = SpringDocConfiguration.QUEUE)
     private void processMessage(String documents) {
-        rabbitTemplate.convertAndSend(SpringDocConfiguration.EXCHANGE, SpringDocConfiguration.ECHO_OUT_QUEUE_NAME, documents, message -> {
+        rabbitTemplate.convertAndSend(SpringDocConfiguration.EXCHANGE, SpringDocConfiguration.QUEUE_KEY, documents, message -> {
             message.getMessageProperties().getHeaders().put(SpringDocConfiguration.ECHO_MESSAGE_COUNT_PROPERTY_NAME, messageCount.incrementAndGet());
             return message;
         });

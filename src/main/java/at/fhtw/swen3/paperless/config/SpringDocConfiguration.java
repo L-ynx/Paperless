@@ -15,6 +15,8 @@ public class SpringDocConfiguration {
 
     public static final String EXCHANGE = "rabbitExchange";
     public static final String QUEUE = "rabbitQueue";
+    public static final String QUEUE_KEY = "rabbitQueueKey";
+
     public static final String ECHO_IN_QUEUE_NAME = "rabbitEchoIn";
     public static final String ECHO_OUT_QUEUE_NAME = "rabbitEchoOut";
     public static final String ECHO_MESSAGE_COUNT_PROPERTY_NAME = "MessageCount";
