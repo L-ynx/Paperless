@@ -23,6 +23,8 @@ services:
     depends_on:
       - paperless-db
       - rabbitmq
+    environment:
+      MINIO_URL: http://minio:9000
 
   paperless-db:
     container_name: paperless-postgres

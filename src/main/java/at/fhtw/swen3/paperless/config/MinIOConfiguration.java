@@ -19,12 +19,11 @@ public class MinIOConfiguration {
     @Bean
     public MinioClient minioClient() {
         try{
-            MinioClient minioClient = MinioClient.builder()
+
+            return MinioClient.builder()
                     .endpoint(url)
                     .credentials(user, password)
                     .build();
-
-            return minioClient;
         } catch (Exception e) {
             throw new RuntimeException("Could not initialize MinIO client", e);
         }
