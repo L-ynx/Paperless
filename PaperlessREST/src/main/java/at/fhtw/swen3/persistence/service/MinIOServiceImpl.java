@@ -40,4 +40,9 @@ public class MinIOServiceImpl implements MinIOService {
             LOGGER.warn("Bucket " + bucketName + " not created.");
         }
     }
+
+    @Override
+    public void saveObject() {
+
+    }
 }

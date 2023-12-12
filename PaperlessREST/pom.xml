@@ -3,9 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>at.fhtw.swen3</groupId>
-    <artifactId>Paperless</artifactId>
+    <artifactId>PaperlessREST</artifactId>
     <packaging>jar</packaging>
-    <name>Paperless</name>
+    <name>PaperlessREST</name>
     <version>1.0</version>
 
     <properties>

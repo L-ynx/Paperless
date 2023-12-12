@@ -35,15 +35,17 @@ public class DocumentServiceImpl implements DocumentService {
 
     private final RabbitTemplate rabbitTemplate;
     private final DocumentRepository repository;
+    private final MinIOServiceImpl minIOService;
     private final DocumentTypeService documentTypeService;
     private final CorrespondentService correspondentService;
     private final DocTagService docTagService;
     protected final DatabaseMapper mapper;
 
     @Autowired
-    public DocumentServiceImpl(RabbitTemplate rabbitTemplate, DocumentRepository repository, DocumentTypeService documentTypeService, CorrespondentService correspondentService, DocTagService docTagService, DatabaseMapper mapper) {
+    public DocumentServiceImpl(RabbitTemplate rabbitTemplate, DocumentRepository repository, MinIOServiceImpl minIOService, DocumentTypeService documentTypeService, CorrespondentService correspondentService, DocTagService docTagService, DatabaseMapper mapper) {
         this.rabbitTemplate = rabbitTemplate;
         this.repository = repository;
+        this.minIOService = minIOService;
         this.documentTypeService = documentTypeService;
         this.correspondentService = correspondentService;
         this.docTagService = docTagService;

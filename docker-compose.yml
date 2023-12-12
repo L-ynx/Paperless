@@ -15,7 +15,7 @@ services:
     container_name: paperless-rest-server
     platform: linux/amd64
     build:
-      context: .
+      context: PaperlessREST
       dockerfile: Dockerfile
     image: paperless-rest-server:latest
     ports:
