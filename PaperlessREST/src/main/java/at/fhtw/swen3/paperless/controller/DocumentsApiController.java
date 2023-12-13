@@ -3,8 +3,15 @@ package at.fhtw.swen3.paperless.controller;
 import at.fhtw.swen3.paperless.exceptions.RabbitMQException;
 import at.fhtw.swen3.paperless.exceptions.RestServerException;
 import at.fhtw.swen3.paperless.services.dto.*;
+import at.fhtw.swen3.persistence.mapper.DatabaseMapper;
+import at.fhtw.swen3.persistence.service.CorrespondentService;
+import at.fhtw.swen3.persistence.service.DocTagService;
 import at.fhtw.swen3.persistence.service.DocumentService;
+import at.fhtw.swen3.persistence.service.DocumentTypeService;
+import at.fhtw.swen3.persistence.service.dto.CorrespondentDTO;
+import at.fhtw.swen3.persistence.service.dto.DocTagDTO;
 import at.fhtw.swen3.persistence.service.dto.DocumentDTO;
+import at.fhtw.swen3.persistence.service.dto.DocumentTypeDTO;
 import jakarta.annotation.Generated;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-10-23T11:25:43.450871Z[Etc/UTC]")
 @Controller
@@ -34,11 +43,19 @@ public class DocumentsApiController implements DocumentsApi {
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentsApiController.class);
     private final NativeWebRequest request;
     private final DocumentService documentService;
+    private final DocumentTypeService documentTypeService;
+    private final CorrespondentService correspondentService;
+    private final DocTagService docTagService;
+    private final DatabaseMapper mapper;
 
     @Autowired
-    public DocumentsApiController(NativeWebRequest request, DocumentService documentService) {
+    public DocumentsApiController(NativeWebRequest request, DocumentService documentService, DocumentTypeService documentTypeService, CorrespondentService correspondentService, DocTagService docTagService, DatabaseMapper mapper) {
         this.request = request;
         this.documentService = documentService;
+        this.documentTypeService = documentTypeService;
+        this.correspondentService = correspondentService;
+        this.docTagService = docTagService;
+        this.mapper = mapper;
     }
 
     @Override
@@ -108,8 +125,20 @@ public class DocumentsApiController implements DocumentsApi {
 
     @Override
     public ResponseEntity<String> uploadDocument(String title, OffsetDateTime created, Integer documentType, List<Integer> tags, Integer correspondent, List<MultipartFile> document) {
+        DocumentDTO documentDTO;
+        DocumentDTO savedDocument;
+
         try {
-            documentService.create(title, created, documentType, tags, correspondent, document);
+            documentDTO = createDocumentDTO(title, created, documentType, tags, correspondent, document);
+        } catch (Exception e) {
+            LOGGER.error("Error creating document", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        try {
+            savedDocument = mapper.toDTO(documentService.saveDocument(mapper.toEntity(documentDTO)));
+            
+            //documentService.create(title, created, documentType, tags, correspondent, document);
             LOGGER.info("Document uploaded successfully");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (RabbitMQException ex) {
@@ -130,6 +159,20 @@ public class DocumentsApiController implements DocumentsApi {
         headers.setContentType(MediaType.IMAGE_JPEG);
         headers.setContentLength(imageBytes.length);
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+    }
+
+    private DocumentDTO createDocumentDTO(String title, OffsetDateTime created, Integer documentType, List<Integer> tags, Integer correspondent, List<MultipartFile> document) {
+        DocumentTypeDTO type = documentTypeService.findById(documentType == null ? null : Long.valueOf(documentType));
+        CorrespondentDTO correspondentEntity = correspondentService.findById(correspondent == null ? null : Long.valueOf(correspondent));
+        List<DocTagDTO> tagEntities = docTagService.findAllById(tags == null ? null : tags.stream().map(Long::valueOf).collect(Collectors.toList()));
+
+        return DocumentDTO.builder()
+                .title(title == null ? document.get(0).getOriginalFilename() : title)
+                .createdAt(created == null ? LocalDateTime.now() : created.toLocalDateTime())
+                .documentType(mapper.toEntity(type))
+                .correspondent(mapper.toEntity(correspondentEntity))
+                .docTags(mapper.toDocTagsEntity(tagEntities))
+                .build();
     }
 
 }

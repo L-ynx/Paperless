@@ -89,6 +89,11 @@ public class DocumentServiceImpl implements DocumentService {
         }
     }
 
+    @Override
+    public Document saveDocument(Document document) {
+        return repository.save(document);
+    }
+
     private void processMessage(String documents) {
         rabbitTemplate.convertAndSend(SpringDocConfiguration.EXCHANGE, SpringDocConfiguration.QUEUE_KEY, documents, message -> {
             message.getMessageProperties().getHeaders().put(SpringDocConfiguration.ECHO_MESSAGE_COUNT_PROPERTY_NAME, messageCount.incrementAndGet());
