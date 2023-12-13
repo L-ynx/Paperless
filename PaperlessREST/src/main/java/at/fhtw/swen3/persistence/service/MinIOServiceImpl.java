@@ -3,12 +3,16 @@ package at.fhtw.swen3.persistence.service;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
 
 @Slf4j
 @Service
@@ -42,7 +46,19 @@ public class MinIOServiceImpl implements MinIOService {
     }
 
     @Override
-    public void saveObject() {
-
+    public void saveObject(MultipartFile file) {
+        try (InputStream is = file.getInputStream()) {
+            minioClient.putObject(
+                    PutObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(file.getOriginalFilename())
+                            .stream(is, file.getSize(), -1)
+                            .contentType(file.getContentType())
+                            .build()
+            );
+            LOGGER.info("Object " + file.getOriginalFilename() + " saved successfully to MinIO.");
+        } catch (Exception e) {
+            LOGGER.warn("Object " + file.getOriginalFilename() + " not saved.");
+        }
     }
 }

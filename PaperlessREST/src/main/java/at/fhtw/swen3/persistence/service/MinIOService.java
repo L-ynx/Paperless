@@ -1,6 +1,9 @@
 package at.fhtw.swen3.persistence.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public interface MinIOService {
     void createBucket(String bucketName);
-    void saveObject();
+
+    void saveObject(MultipartFile file);
 }

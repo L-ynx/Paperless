@@ -4,14 +4,12 @@ import at.fhtw.swen3.paperless.exceptions.RabbitMQException;
 import at.fhtw.swen3.paperless.exceptions.RestServerException;
 import at.fhtw.swen3.paperless.services.dto.*;
 import at.fhtw.swen3.persistence.mapper.DatabaseMapper;
-import at.fhtw.swen3.persistence.service.CorrespondentService;
-import at.fhtw.swen3.persistence.service.DocTagService;
-import at.fhtw.swen3.persistence.service.DocumentService;
-import at.fhtw.swen3.persistence.service.DocumentTypeService;
+import at.fhtw.swen3.persistence.service.*;
 import at.fhtw.swen3.persistence.service.dto.CorrespondentDTO;
 import at.fhtw.swen3.persistence.service.dto.DocTagDTO;
 import at.fhtw.swen3.persistence.service.dto.DocumentDTO;
 import at.fhtw.swen3.persistence.service.dto.DocumentTypeDTO;
+import at.fhtw.swen3.persistence.service.messageQueue.MessageQueueService;
 import jakarta.annotation.Generated;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,15 +44,19 @@ public class DocumentsApiController implements DocumentsApi {
     private final DocumentTypeService documentTypeService;
     private final CorrespondentService correspondentService;
     private final DocTagService docTagService;
+    private final MinIOService minIOService;
+    private final MessageQueueService messageQueueService;
     private final DatabaseMapper mapper;
 
     @Autowired
-    public DocumentsApiController(NativeWebRequest request, DocumentService documentService, DocumentTypeService documentTypeService, CorrespondentService correspondentService, DocTagService docTagService, DatabaseMapper mapper) {
+    public DocumentsApiController(NativeWebRequest request, DocumentService documentService, DocumentTypeService documentTypeService, CorrespondentService correspondentService, DocTagService docTagService, DatabaseMapper mapper, MinIOService minIOService, MessageQueueService messageQueueService) {
         this.request = request;
         this.documentService = documentService;
         this.documentTypeService = documentTypeService;
         this.correspondentService = correspondentService;
         this.docTagService = docTagService;
+        this.minIOService = minIOService;
+        this.messageQueueService = messageQueueService;
         this.mapper = mapper;
     }
 
@@ -137,7 +139,13 @@ public class DocumentsApiController implements DocumentsApi {
 
         try {
             savedDocument = mapper.toDTO(documentService.saveDocument(mapper.toEntity(documentDTO)));
-            
+
+            for (MultipartFile multipartFile : document) {
+                minIOService.saveObject(multipartFile);
+                messageQueueService.processMessage("Document uploaded successfully: " + multipartFile.getOriginalFilename());
+            }
+
+
             //documentService.create(title, created, documentType, tags, correspondent, document);
             LOGGER.info("Document uploaded successfully");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
