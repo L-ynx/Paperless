@@ -1,8 +1,8 @@
 FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /usr/src/app
-COPY ./pom.xml .
+COPY pom.xml .
 RUN mvn -B -f ./pom.xml -s /usr/share/maven/ref/settings-docker.xml dependency:go-offline -DskipTests
-COPY ./ .
+COPY .. .
 RUN mvn -B -f ./pom.xml -s /usr/share/maven/ref/settings-docker.xml package -DskipTests -DoutputDirectory=target
 
 FROM openjdk:17-jdk-alpine
@@ -18,8 +18,8 @@ RUN tesseract --list-langs
 RUN tesseract -v
 
 # Copy the JAR file from the build stage to the final image
-COPY --from=build /usr/src/app/target/PaperlessServices-1.0.jar PaperlessServices.jar
+COPY --from=build /usr/src/app/target/PaperlessService-1.0.jar PaperlessService.jar
 
 EXPOSE 8082
 
-ENTRYPOINT ["java", "-jar", "PaperlessServices.jar"]
+ENTRYPOINT ["java", "-jar", "PaperlessService.jar"]

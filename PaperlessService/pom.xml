@@ -12,9 +12,9 @@
 
     <groupId>at.fhtw.swen3</groupId>
     <packaging>jar</packaging>
-    <artifactId>PaperlessServices</artifactId>
+    <artifactId>PaperlessService</artifactId>
     <version>1.0</version>
-    <name>PaperlessServices</name>
+    <name>PaperlessService</name>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -41,6 +41,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.30</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.5.7</version>
         </dependency>
     </dependencies>
 

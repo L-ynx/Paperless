@@ -1,5 +1,14 @@
 package at.fhtw.swen3.paperless.services;
 
+import at.fhtw.swen3.paperless.exceptions.StorageException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -10,18 +19,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 
-import at.fhtw.swen3.paperless.exceptions.StorageException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
-import org.springframework.web.multipart.MultipartFile;
-
-
 @Service
-public class StorageServiceImpl implements StorageService{
+public class StorageServiceImpl implements StorageService {
     private final Path rootLocation;
 
     @Autowired
@@ -47,8 +46,7 @@ public class StorageServiceImpl implements StorageService{
                 Files.copy(inputStream, destinationFile,
                         StandardCopyOption.REPLACE_EXISTING);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new StorageException("Failed to store file.", e);
         }
     }
@@ -60,8 +58,7 @@ public class StorageServiceImpl implements StorageService{
                     .filter(path -> !path.equals(this.rootLocation))
                     .filter(path -> path.toFile().isFile())
                     .map(this.rootLocation::relativize);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new StorageException("Failed to read stored files", e);
         }
 
@@ -79,14 +76,12 @@ public class StorageServiceImpl implements StorageService{
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
-            }
-            else {
+            } else {
                 throw new StorageFileNotFoundException(
                         "Could not read file: " + filename);
 
             }
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             throw new StorageFileNotFoundException("Could not read file: " + filename, e);
         }
     }
@@ -100,8 +95,7 @@ public class StorageServiceImpl implements StorageService{
     public void init() {
         try {
             Files.createDirectories(rootLocation);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new StorageException("Could not initialize services", e);
         }
     }

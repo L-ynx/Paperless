@@ -66,7 +66,7 @@ services:
     container_name: paperless-ocrworker
     platform: linux/amd64
     build:
-      context: PaperlessServices
+      context: PaperlessService
       dockerfile: Dockerfile
     image: paperless-ocrworker:latest
     ports:
@@ -76,7 +76,7 @@ services:
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_USERNAME: admin
       SPRING_RABBITMQ_PASSWORD: admin
-      MINIO_URL: http://filestore:9000
+      MINIO_URL: http://minio:9000
     depends_on:
       - rabbitmq
 

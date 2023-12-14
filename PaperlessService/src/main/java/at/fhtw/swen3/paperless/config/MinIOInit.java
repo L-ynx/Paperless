@@ -1,19 +1,18 @@
 package at.fhtw.swen3.paperless.config;
 
-
-import at.fhtw.swen3.persistence.service.MinIOService;
+import at.fhtw.swen3.paperless.services.MinIOService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class MinIOInitializer {
+public class MinIOInit {
     private final MinIOService minIOService;
 
     @Value("${minio.bucket}")
     private String bucketName;
 
-    public MinIOInitializer(MinIOService minIOService) {
+    public MinIOInit(MinIOService minIOService) {
         this.minIOService = minIOService;
     }
 

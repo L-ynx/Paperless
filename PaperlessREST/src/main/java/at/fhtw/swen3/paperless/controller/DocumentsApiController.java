@@ -142,7 +142,7 @@ public class DocumentsApiController implements DocumentsApi {
 
             for (MultipartFile multipartFile : document) {
                 minIOService.saveObject(multipartFile);
-                messageQueueService.processMessage("Document uploaded successfully: " + multipartFile.getOriginalFilename());
+                messageQueueService.processMessage(multipartFile.getOriginalFilename());
             }
 
 
