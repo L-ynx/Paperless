@@ -15,7 +15,7 @@ services:
     container_name: paperless-rest-server
     platform: linux/amd64
     build:
-      context: .
+      context: PaperlessREST
       dockerfile: Dockerfile
     image: paperless-rest-server:latest
     ports:
@@ -23,6 +23,8 @@ services:
     depends_on:
       - paperless-db
       - rabbitmq
+    environment:
+      MINIO_URL: http://minio:9000
 
   paperless-db:
     container_name: paperless-postgres
@@ -48,7 +50,38 @@ services:
       - ./init/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
       - ./init/definitions.json:/etc/rabbitmq/definitions.json
 
+  minio:
+    image: quay.io/minio/minio
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"     # MinIO Server
+      - "9001:9001"     # MinIO Console
+
+  ocrworker:
+    container_name: paperless-ocrworker
+    platform: linux/amd64
+    build:
+      context: PaperlessServices
+      dockerfile: Dockerfile
+    image: paperless-ocrworker:latest
+    ports:
+      - "8082:8082"
+    environment:
+      TESSERACT_PATH: /usr/share/tessdata
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_USERNAME: admin
+      SPRING_RABBITMQ_PASSWORD: admin
+      MINIO_URL: http://minio:9000
+    depends_on:
+      - rabbitmq
+
 volumes:
   paperless-db-data:
   rabbitmq-data:
   rabbitmq-log:
+  minio_data:
