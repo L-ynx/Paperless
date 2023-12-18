@@ -12,7 +12,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: paperlessREST
+        working-directory: PaperlessREST
 
     steps:
     - name: Checkout code
