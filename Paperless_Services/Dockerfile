@@ -18,8 +18,8 @@ RUN tesseract --list-langs
 RUN tesseract -v
 
 # Copy the JAR file from the build stage to the final image
-COPY --from=build /usr/src/app/target/PaperlessService-1.0.jar PaperlessService.jar
+COPY --from=build /usr/src/app/target/PaperlessServices-1.0.jar PaperlessServices.jar
 
 EXPOSE 8082
 
-ENTRYPOINT ["java", "-jar", "PaperlessService.jar"]
+ENTRYPOINT ["java", "-jar", "PaperlessServices.jar"]

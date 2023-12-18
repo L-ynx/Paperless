@@ -12,9 +12,9 @@
 
     <groupId>at.fhtw.swen3</groupId>
     <packaging>jar</packaging>
-    <artifactId>PaperlessService</artifactId>
+    <artifactId>PaperlessServices</artifactId>
     <version>1.0</version>
-    <name>PaperlessService</name>
+    <name>PaperlessServices</name>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
