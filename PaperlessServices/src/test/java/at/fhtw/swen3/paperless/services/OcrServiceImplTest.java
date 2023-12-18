@@ -1,6 +1,5 @@
 package at.fhtw.swen3.paperless.services;
 
-import at.fhtw.swen3.paperless.services.OcrServiceImpl;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -8,23 +7,14 @@ import org.junit.jupiter.api.io.TempDir;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OcrServiceImplTest {
-
-
     @Test
     void testExecuteOCROnValidImage(@TempDir Path tempDir) throws Exception {
         String tessData = getResourcePath("Tesseract/eng.traineddata");
