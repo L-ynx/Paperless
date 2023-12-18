@@ -1,9 +1,7 @@
 package at.fhtw.swen3.paperless.services;
 
-import io.minio.BucketExistsArgs;
-import io.minio.GetObjectArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
+import at.fhtw.swen3.paperless.misc.RetrievedObject;
+import io.minio.*;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,19 +44,25 @@ public class MinIOService {
         }
     }
 
-    public Path retrieveObject(String fileName) {
+    public RetrievedObject retrieveObject(String fileName) {
         try (InputStream stream = minioClient.getObject(
                 GetObjectArgs.builder()
                         .bucket(bucketName)
                         .object(fileName)
                         .build())) {
 
+            StatObjectResponse stat =
+                    minioClient.statObject(
+                            StatObjectArgs.builder().bucket(bucketName).object(fileName).build());
+
+            String id = stat.userMetadata().get("id");
+
             Path path = Path.of("/" + fileName);
             Files.copy(stream, path, StandardCopyOption.REPLACE_EXISTING);
 
             LOGGER.info("Object " + fileName + " retrieved successfully from MinIO.");
 
-            return path;
+            return new RetrievedObject(path, id);
         } catch (Exception e) {
             LOGGER.warn("Object " + fileName + " not retrieved.");
             throw new RuntimeException("Could not retrieve object from MinIO", e);

@@ -141,9 +141,11 @@ public class DocumentsApiController implements DocumentsApi {
             savedDocument = mapper.toDTO(documentService.saveDocument(mapper.toEntity(documentDTO)));
 
             for (MultipartFile multipartFile : document) {
-                minIOService.saveObject(multipartFile);
+                minIOService.saveObject(multipartFile, String.valueOf(savedDocument.getId()));
                 messageQueueService.processMessage(multipartFile.getOriginalFilename());
             }
+
+            //minIOService.saveObject(savedDocument);
 
 
             //documentService.create(title, created, documentType, tags, correspondent, document);

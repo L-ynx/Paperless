@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -46,12 +48,15 @@ public class MinIOServiceImpl implements MinIOService {
     }
 
     @Override
-    public void saveObject(MultipartFile file) {
+    public void saveObject(MultipartFile file, String id) {
+        Map<String, String> docID = new HashMap<>();
+        docID.put("id", id);
         try (InputStream is = file.getInputStream()) {
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(bucketName)
                             .object(file.getOriginalFilename())
+                            .userMetadata(docID)
                             .stream(is, file.getSize(), -1)
                             .contentType(file.getContentType())
                             .build()

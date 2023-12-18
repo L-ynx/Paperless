@@ -5,5 +5,5 @@ import org.springframework.web.multipart.MultipartFile;
 public interface MinIOService {
     void createBucket(String bucketName);
 
-    void saveObject(MultipartFile file);
+    void saveObject(MultipartFile file, String id);
 }
