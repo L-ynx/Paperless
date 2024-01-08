@@ -37,4 +37,17 @@ public class Document {
     public long getId() {
         return id;
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    // Manually added setter for content
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getContent() {
+        return content;
+    }
 }

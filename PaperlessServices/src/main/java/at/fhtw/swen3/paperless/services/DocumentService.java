@@ -14,5 +14,4 @@ public class DocumentService {
     public void updateContent(String content, long id) {
         documentRepository.updateContent(content, id);
     }
-
 }
