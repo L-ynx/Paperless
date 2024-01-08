@@ -32,4 +32,9 @@ public class Document {
 
     @ManyToMany
     private List<DocTag> docTags;
+
+    // manually added getter & setter (annotations in ElasticSearchService did not work)
+    public long getId() {
+        return id;
+    }
 }
