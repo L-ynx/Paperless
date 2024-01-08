@@ -14,4 +14,6 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
     @Query("update Document d set d.content = ?1 where d.id = ?2")
     void updateContent(String content, long id);
 
+    @Query("select d.title from Document d where d.id = ?1")
+    String findTitleById(long id);
 }

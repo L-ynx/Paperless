@@ -11,7 +11,8 @@ public class DocumentService {
         this.documentRepository = documentRepository;
     }
 
-    public void updateContent(String content, long id) {
+    public String updateContent(String content, long id) {
         documentRepository.updateContent(content, id);
+        return documentRepository.findTitleById(id);
     }
 }

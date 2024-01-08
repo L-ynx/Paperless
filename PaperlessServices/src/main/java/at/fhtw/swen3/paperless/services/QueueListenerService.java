@@ -43,12 +43,13 @@ public class QueueListenerService {
 
         try {
             extractedText = ocrService.executeOCR(path.toFile());
-            documentService.updateContent(extractedText, Long.parseLong(objectId));
+            String title = documentService.updateContent(extractedText, Long.parseLong(objectId));
 
             // Assuming the document entity or similar object to index
             Document document = new Document();
             document.setId(Long.parseLong(objectId));
             document.setContent(extractedText);
+            document.setTitle(title);
 
             // Index the document
             Result indexResult = searchIndexService.indexDocument(document);
