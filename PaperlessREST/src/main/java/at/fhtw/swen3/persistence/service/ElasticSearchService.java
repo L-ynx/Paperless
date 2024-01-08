@@ -4,6 +4,10 @@ import at.fhtw.swen3.paperless.config.ElasticSearchConfig;
 import at.fhtw.swen3.persistence.entity.Document;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.Result;
+import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.SimpleQueryStringQuery;
 import co.elastic.clients.elasticsearch.core.DeleteResponse;
 import co.elastic.clients.elasticsearch.core.GetResponse;
 import co.elastic.clients.elasticsearch.core.IndexResponse;
@@ -79,14 +83,12 @@ public class ElasticSearchService implements SearchIndexService {
                     .index(ElasticSearchConfig.DOCUMENTS_INDEX_NAME)
                     .query(q -> q
                             .multiMatch(
-                                    m -> m.fields("title", "content").query(searchString).fuzziness("AUTO")
+                                    m -> m.fields("content", "title").fuzziness("AUTO").query("*" + searchString + "*")
                             )), Document.class);
 
-            System.out.println("asdasd" + searchResponse.hits().hits().stream().map(Hit::source).toList());
-
-            return searchResponse.hits().hits().stream().map(Hit::source).toList();
+            return searchResponse.hits().hits().stream().map(hit -> hit.source()).toList();
         } catch (IOException e) {
-            log.error("Error searching for documents \n" + e.getMessage());
+            LOGGER.error("Error searching for documents \n" + e.getMessage());
             throw e;
         }
     }
