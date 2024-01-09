@@ -21,11 +21,17 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - paperless-db
-      - rabbitmq
-      - elastic_search
+      paperless-db:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+      minio:
+        condition: service_started
+      elastic_search:
+        condition: service_healthy
     environment:
       MINIO_URL: http://minio:9000
+      ELASTICSEARCH_HOST: elastic_search
 
   paperless-db:
     container_name: paperless-postgres
@@ -80,8 +86,12 @@ services:
       MINIO_URL: http://minio:9000
       ELASTICSEARCH_HOST: elastic_search
     depends_on:
-      - rabbitmq
-      - elastic_search
+      rabbitmq:
+        condition: service_started
+      minio:
+        condition: service_started
+      elastic_search:
+        condition: service_healthy
 
   elastic_search:
     image: elasticsearch:8.7.1
@@ -97,8 +107,12 @@ services:
     #     soft: -1
     #     hard: -1
     ports:
-      - 9200:9200
-      - 9300:9300
+      - "9200:9200"
+      - "9300:9300"
+    healthcheck:
+      interval: 8s
+      retries: 50
+      test: curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'
 
   kibanba:
     image: docker.elastic.co/kibana/kibana:8.2.3

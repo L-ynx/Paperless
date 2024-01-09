@@ -4,15 +4,9 @@ import at.fhtw.swen3.paperless.config.ElasticSearchConfig;
 import at.fhtw.swen3.persistence.entity.Document;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.Result;
-import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
-import co.elastic.clients.elasticsearch._types.query_dsl.Query;
-import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
-import co.elastic.clients.elasticsearch._types.query_dsl.SimpleQueryStringQuery;
 import co.elastic.clients.elasticsearch.core.DeleteResponse;
 import co.elastic.clients.elasticsearch.core.GetResponse;
-import co.elastic.clients.elasticsearch.core.IndexResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
-import co.elastic.clients.elasticsearch.core.search.Hit;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,19 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class ElasticSearchService implements SearchIndexService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchService.class);
+public class SearchIndexServiceImpl implements SearchIndexService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchIndexServiceImpl.class);
     private final ElasticsearchClient esClient;
 
     @Autowired
-    public ElasticSearchService(ElasticsearchClient esClient) throws IOException {
+    public SearchIndexServiceImpl(ElasticsearchClient esClient) throws IOException {
         this.esClient = esClient;
 
         if (!esClient.indices().exists(
