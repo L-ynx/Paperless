@@ -23,6 +23,7 @@ services:
     depends_on:
       - paperless-db
       - rabbitmq
+      - elastic_search
     environment:
       MINIO_URL: http://minio:9000
 
@@ -77,8 +78,10 @@ services:
       SPRING_RABBITMQ_USERNAME: admin
       SPRING_RABBITMQ_PASSWORD: admin
       MINIO_URL: http://minio:9000
+      ELASTICSEARCH_HOST: elastic_search
     depends_on:
       - rabbitmq
+      - elastic_search
 
   elastic_search:
     image: elasticsearch:8.7.1
@@ -108,3 +111,4 @@ volumes:
   rabbitmq-data:
   rabbitmq-log:
   minio_data:
+  elastic_search_data:
