@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("${openapi.paperlessRestServer.base-path:}")
 @CrossOrigin(origins = "http://localhost:8080")
-public class DocumentsApiController implements DocumentsApi {
+public class  DocumentsApiController implements DocumentsApi {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentsApiController.class);
     private final NativeWebRequest request;
@@ -97,7 +98,16 @@ public class DocumentsApiController implements DocumentsApi {
 
     @Override
     public ResponseEntity<GetDocuments200Response> getDocuments(Integer page, Integer pageSize, String query, String ordering, List<Integer> tagsIdAll, Integer documentTypeId, Integer storagePathIdIn, Integer correspondentId, Boolean truncateContent) {
-        List<DocumentDTO> documents = documentService.findAll();
+        List<DocumentDTO> documents = null;
+        if (query == null) {
+            documents = documentService.findAll();
+        }
+        else
+            try {
+            documents = mapper.toDTOs(documentService.searchDocuments(query));
+            } catch (IOException e){
+                LOGGER.error("Error searching for documents! \n");
+        }
 
         GetDocuments200Response response = new GetDocuments200Response();
         response.setCount(documents.size());
@@ -107,11 +117,11 @@ public class DocumentsApiController implements DocumentsApi {
             inner.id((int) documentDTO.getId());
             inner.title(documentDTO.getTitle());
             inner.content(documentDTO.getContent());
-            inner.created(documentDTO.getCreatedAt().toString());
+            // inner.created(documentDTO.getCreatedAt().toString());
             //inner.documentType((int) documentDTO.getDocumentType().getMatchingAlgorithm());
             //inner.correspondent((int) documentDTO.getCorrespondent().getDocumentCount());
-            List<Integer> tags = documentDTO.getDocTags().stream().map(tag -> Math.toIntExact(tag.getMatchingAlgorithm())).toList();
-            inner.tags(tags);
+            //List<Integer> tags = documentDTO.getDocTags().stream().map(tag -> Math.toIntExact(tag.getMatchingAlgorithm())).toList();
+            //inner.tags(tags);
             innerResults.add(inner);
         }
         response.setResults(innerResults);
@@ -141,9 +151,11 @@ public class DocumentsApiController implements DocumentsApi {
             savedDocument = mapper.toDTO(documentService.saveDocument(mapper.toEntity(documentDTO)));
 
             for (MultipartFile multipartFile : document) {
-                minIOService.saveObject(multipartFile);
+                minIOService.saveObject(multipartFile, String.valueOf(savedDocument.getId()));
                 messageQueueService.processMessage(multipartFile.getOriginalFilename());
             }
+
+            //minIOService.saveObject(savedDocument);
 
 
             //documentService.create(title, created, documentType, tags, correspondent, document);

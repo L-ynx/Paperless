@@ -3,6 +3,7 @@ package at.fhtw.swen3.persistence.service;
 import at.fhtw.swen3.persistence.entity.Document;
 import at.fhtw.swen3.persistence.mapper.DatabaseMapper;
 import at.fhtw.swen3.persistence.repository.DocumentRepository;
+import at.fhtw.swen3.persistence.service.SearchIndexService;
 import at.fhtw.swen3.persistence.service.dto.DocumentDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -27,12 +28,14 @@ public class DocumentServiceImpl implements DocumentService {
     private final RabbitTemplate rabbitTemplate;
     private final DocumentRepository repository;
     protected final DatabaseMapper mapper;
+    private final SearchIndexService searchIndexService;
 
     @Autowired
-    public DocumentServiceImpl(RabbitTemplate rabbitTemplate, DocumentRepository repository, DatabaseMapper mapper) {
+    public DocumentServiceImpl(RabbitTemplate rabbitTemplate, DocumentRepository repository, DatabaseMapper mapper, SearchIndexService searchIndexService) {
         this.rabbitTemplate = rabbitTemplate;
         this.repository = repository;
         this.mapper = mapper;
+        this.searchIndexService = searchIndexService;
     }
 
     @Override
@@ -71,5 +74,32 @@ public class DocumentServiceImpl implements DocumentService {
             LOGGER.warn(e.getMessage());
         }
         return imageBytes;
+    }
+
+    @Override
+    public List<Document> searchDocuments(String query) throws IOException {
+        //no need to execute a query against the db, elastic search already contains
+        //all the data we need in order to return useful results.
+        return this.searchIndexService.searchDocument(query);
+    }
+
+    @Override
+    public List<Document> fetchAllDocuments() {
+        return this.repository.findAll();
+    }
+
+    @Override
+    public List<Document> handleGetDocuments(String query) throws IOException {
+
+        if (query == null || query.isEmpty()) {
+
+            return fetchAllDocuments();
+
+        } else {
+
+            return searchDocuments(query);
+
+        }
+
     }
 }

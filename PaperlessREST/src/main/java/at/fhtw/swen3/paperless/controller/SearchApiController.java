@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,8 +33,6 @@ public class SearchApiController implements SearchApi {
 
     @Override
     public ResponseEntity<List<String>> autoComplete(String term, Integer limit) {
-        List<String> responseBody = new ArrayList<>();
-        responseBody.add("string");
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
