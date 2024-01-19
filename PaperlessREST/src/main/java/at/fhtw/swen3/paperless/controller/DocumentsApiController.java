@@ -78,14 +78,25 @@ public class  DocumentsApiController implements DocumentsApi {
 
     @Override
     public ResponseEntity<Void> deleteDocument(Integer id) {
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        documentService.deleteDocument(id);
+        minIOService.deleteObject(String.valueOf(id));
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<GetDocument200Response> getDocument(Integer id, Integer page, Boolean fullPerms) {
-        GetDocument200Response documentTypes = new GetDocument200Response();
-        documentTypes.setContent("GET /api/documents/{id}");
-        return new ResponseEntity<>(documentTypes, HttpStatus.OK);
+        DocumentDTO documentDTO = documentService.findById(id);
+        GetDocument200Response response = new GetDocument200Response();
+        response.setId((int) documentDTO.getId());
+        response.setTitle(documentDTO.getTitle());
+        response.setContent(documentDTO.getContent());
+        //response.setDocumentType((int) documentDTO.getDocumentType().getMatchingAlgorithm());
+        //response.setCorrespondent((int) documentDTO.getCorrespondent().getDocumentCount());
+        //List<Integer> tags = documentDTO.getDocTags().stream().map(tag -> Math.toIntExact(tag.getMatchingAlgorithm())).toList();
+        //response.setTags(tags);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override
@@ -170,6 +181,7 @@ public class  DocumentsApiController implements DocumentsApi {
         }
     }
 
+
     @Override
     public ResponseEntity<ByteArrayResource> getDocumentThumb(Integer id) {
         byte[] imageBytes = documentService.getThumbnail(id);
@@ -194,5 +206,7 @@ public class  DocumentsApiController implements DocumentsApi {
                 .docTags(mapper.toDocTagsEntity(tagEntities))
                 .build();
     }
+
+
 
 }

@@ -1,9 +1,7 @@
 package at.fhtw.swen3.persistence.service;
 
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
+import io.minio.*;
+import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,4 +64,25 @@ public class MinIOServiceImpl implements MinIOService {
             LOGGER.warn("Object " + file.getOriginalFilename() + " not saved.");
         }
     }
+
+    @Override
+    public void deleteObject(String id) {
+        Iterable<Result<Item>> results = minioClient.listObjects(
+                ListObjectsArgs.builder().bucket(bucketName).includeUserMetadata(true).build());
+
+
+
+        for (io.minio.Result<io.minio.messages.Item> result : results) {
+            try {
+                if (result.get().userMetadata().get("X-Amz-Meta-Id").equals(id)) {
+                    minioClient.removeObject(
+                            RemoveObjectArgs.builder().bucket(bucketName).object(result.get().objectName()).build());
+                    LOGGER.info("Object " + result.get().objectName() + " deleted successfully from MinIO.");
+                }
+            } catch (Exception e) {
+                LOGGER.warn("Object could not be deleted.");
+            }
+        }
+    }
+
 }

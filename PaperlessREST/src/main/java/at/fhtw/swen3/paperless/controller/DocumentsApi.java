@@ -119,7 +119,6 @@ public interface DocumentsApi {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id
     ) {
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
 

@@ -9,4 +9,5 @@ import java.util.List;
 public interface SearchIndexService {
 
     List<Document> searchDocument(String string) throws IOException;
+    boolean deleteDocumentById(int id);
 }

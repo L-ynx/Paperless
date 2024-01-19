@@ -1,11 +1,9 @@
 package at.fhtw.swen3.paperless.services;
 
 import at.fhtw.swen3.paperless.config.ElasticSearchConfig;
-import at.fhtw.swen3.paperless.services.SearchIndexService;
 import at.fhtw.swen3.paperless.entity.Document;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.Result;
-import co.elastic.clients.elasticsearch.core.DeleteResponse;
 import co.elastic.clients.elasticsearch.core.GetResponse;
 import co.elastic.clients.elasticsearch.core.IndexResponse;
 import org.slf4j.Logger;
@@ -14,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Optional;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ElasticSearchService implements SearchIndexService {
@@ -66,21 +61,6 @@ public class ElasticSearchService implements SearchIndexService {
             log.error("Failed to get document id=" + id + " from elasticsearch: " + e);
             return Optional.empty();
         }
-    }
-
-    @Override
-    public boolean deleteDocumentById(int id) {
-        DeleteResponse result = null;
-        try {
-            result = esClient.delete(d -> d.index(ElasticSearchConfig.DOCUMENTS_INDEX_NAME).id(String.valueOf(id)));
-        } catch (IOException e) {
-            log.warn("Failed to delete document id=" + id + " from elasticsearch: " + e);
-        }
-        if ( result==null )
-            return false;
-        if (result.result() != Result.Deleted )
-            log.warn(result.toString());
-        return result.result()==Result.Deleted;
     }
 
 

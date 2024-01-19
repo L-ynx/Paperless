@@ -3,7 +3,6 @@ package at.fhtw.swen3.persistence.service;
 import at.fhtw.swen3.persistence.entity.Document;
 import at.fhtw.swen3.persistence.mapper.DatabaseMapper;
 import at.fhtw.swen3.persistence.repository.DocumentRepository;
-import at.fhtw.swen3.persistence.service.SearchIndexService;
 import at.fhtw.swen3.persistence.service.dto.DocumentDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -58,6 +57,12 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public Document saveDocument(Document document) {
         return repository.save(document);
+    }
+
+    @Override
+    public void deleteDocument(Integer id) {
+        repository.deleteById(Long.valueOf(id));
+        searchIndexService.deleteDocumentById(id);
     }
 
     @Override

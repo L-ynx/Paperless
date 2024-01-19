@@ -6,4 +6,6 @@ public interface MinIOService {
     void createBucket(String bucketName);
 
     void saveObject(MultipartFile file, String id);
+
+    void deleteObject(String id);
 }

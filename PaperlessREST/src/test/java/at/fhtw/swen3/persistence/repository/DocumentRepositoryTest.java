@@ -34,5 +34,33 @@ public class DocumentRepositoryTest {
         assertEquals(1, documents.size());
         assertEquals("Test Document", documents.get(0).getTitle());
     }
+
+    @Test
+    public void testSave() {
+        Document document = Document.builder()
+                .title("Test Document")
+                .content("Lorem ipsum")
+                .build();
+
+        Document savedDocument = documentRepository.save(document);
+
+        assertEquals("Test Document", savedDocument.getTitle());
+    }
+
+    @Test
+    public void testFindByID() {
+        Document document = Document.builder()
+                .title("Test Document")
+                .content("Lorem ipsum")
+                .build();
+
+        Document savedDocument = documentRepository.save(document);
+
+        Document foundDocument = documentRepository.findById(savedDocument.getId()).orElseThrow(() -> new RuntimeException("Document not found"));
+
+        assertEquals("Test Document", foundDocument.getTitle());
+    }
+
+
 }
 
