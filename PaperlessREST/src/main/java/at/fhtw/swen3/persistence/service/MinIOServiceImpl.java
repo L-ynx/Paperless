@@ -49,6 +49,7 @@ public class MinIOServiceImpl implements MinIOService {
     public void saveObject(MultipartFile file, String id) {
         Map<String, String> docID = new HashMap<>();
         docID.put("id", id);
+
         try (InputStream is = file.getInputStream()) {
             minioClient.putObject(
                     PutObjectArgs.builder()
@@ -69,8 +70,6 @@ public class MinIOServiceImpl implements MinIOService {
     public void deleteObject(String id) {
         Iterable<Result<Item>> results = minioClient.listObjects(
                 ListObjectsArgs.builder().bucket(bucketName).includeUserMetadata(true).build());
-
-
 
         for (io.minio.Result<io.minio.messages.Item> result : results) {
             try {

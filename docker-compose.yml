@@ -44,6 +44,7 @@ services:
       POSTGRES_PASSWORD: admin  # The password for the user
     volumes:
       - paperless-db-data:/var/lib/postgresql/data
+      - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   rabbitmq:
     image: rabbitmq:3-management-alpine

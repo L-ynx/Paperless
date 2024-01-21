@@ -225,10 +225,6 @@ public class DocumentsApiController implements DocumentsApi {
                 messageQueueService.processMessage(multipartFile.getOriginalFilename());
             }
 
-            //minIOService.saveObject(savedDocument);
-
-
-            //documentService.create(title, created, documentType, tags, correspondent, document);
             LOGGER.info("Document uploaded successfully");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (RabbitMQException ex) {
