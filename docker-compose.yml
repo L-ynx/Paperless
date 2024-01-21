@@ -44,6 +44,7 @@ services:
       POSTGRES_PASSWORD: admin  # The password for the user
     volumes:
       - paperless-db-data:/var/lib/postgresql/data
+      - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -114,7 +115,7 @@ services:
       retries: 50
       test: curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'
 
-  kibanba:
+  kibana:
     image: docker.elastic.co/kibana/kibana:8.2.3
     ports:
       - 5601:5601

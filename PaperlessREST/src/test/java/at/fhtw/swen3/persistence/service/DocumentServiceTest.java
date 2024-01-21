@@ -11,11 +11,13 @@ import at.fhtw.swen3.persistence.repository.DocumentRepository;
 import at.fhtw.swen3.persistence.repository.DocumentTypeRepository;
 import at.fhtw.swen3.persistence.service.dto.DocumentDTO;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class DocumentServiceTest {
@@ -51,8 +54,12 @@ public class DocumentServiceTest {
     @Mock
     private DocTagService docTagService;
 
+    @Mock
+    private SearchIndexServiceImpl searchIndexService;
+
     @InjectMocks
     private DocumentServiceImpl documentService;
+
 
     public DocumentServiceTest() {
 
@@ -118,7 +125,7 @@ public class DocumentServiceTest {
         when(mapper.toDTOs(anyList())).thenReturn(Arrays.asList(mockDocumentDTO));
 
         // Act
-        //documentService.create(title, created, documentType, tags, correspondent, documents);
+        // documentService.create(title, created, documentType, tags, correspondent, documents);
 
         // Verify interactions with mock objects
         // verify(documentTypeRepository).findById(Long.valueOf(documentType)); // Verify findById is called with specific documentType
@@ -130,4 +137,63 @@ public class DocumentServiceTest {
         // Verify that repository.save was called
         verify(documentRepository, times(1)).save(any(Document.class));
     }
+
+    @Test
+    void testFindById() {
+        // Arrange
+        Long documentId = 1L;
+        Document mockDocument = new Document();
+        DocumentDTO mockDocumentDTO = new DocumentDTO();
+        when(documentRepository.findById(documentId)).thenReturn(Optional.of(mockDocument));
+        when(mapper.toDTO(mockDocument)).thenReturn(mockDocumentDTO);
+
+        // Act
+        DocumentDTO result = documentService.findById(documentId.intValue());
+
+        // Assert
+        assertNotNull(result);
+        verify(documentRepository).findById(documentId);
+        verify(mapper).toDTO(mockDocument);
+    }
+
+    @Test
+    void testSaveDocument() {
+        // Arrange
+        Document document = new Document();
+        when(documentRepository.save(document)).thenReturn(document);
+
+        // Act
+        Document result = documentService.saveDocument(document);
+
+        // Assert
+        assertNotNull(result);
+        verify(documentRepository).save(document);
+    }
+
+    @Test
+    void testHandleGetDocuments() throws IOException {
+        // Arrange
+        String query = "test";
+        Document singleDocument = new Document(); // Create a single document instance
+        List<Document> documents = Arrays.asList(singleDocument);
+        when(searchIndexService.searchDocument(query)).thenReturn(documents);
+        when(documentRepository.findAll()).thenReturn(documents);
+
+        // Since the service method returns List<Document>, we no longer need to mock toDTO or toDTOs methods
+        // Act
+        List<Document> resultWithQuery = documentService.handleGetDocuments(query);
+        List<Document> resultWithoutQuery = documentService.handleGetDocuments("");
+
+        // Assert
+        assertNotNull(resultWithQuery);
+        assertNotNull(resultWithoutQuery);
+        assertEquals(1, resultWithQuery.size()); // Check if the result list contains exactly one Document
+        assertEquals(1, resultWithoutQuery.size()); // Same check for the empty query
+        assertSame(singleDocument, resultWithQuery.get(0)); // Check if the instances are the same
+        assertSame(singleDocument, resultWithoutQuery.get(0)); // Same instance check for the empty query
+        verify(searchIndexService).searchDocument(query); // Verify that searchDocument was called with the query
+        verify(documentRepository).findAll(); // Verify that findAll was called when query is empty
+        // Since we're not converting to DTOs, we don't need to verify mapper interactions
+    }
+
 }
