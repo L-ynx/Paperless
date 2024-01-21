@@ -10,7 +10,11 @@ import at.fhtw.swen3.persistence.service.dto.DocTagDTO;
 import at.fhtw.swen3.persistence.service.dto.DocumentDTO;
 import at.fhtw.swen3.persistence.service.dto.DocumentTypeDTO;
 import at.fhtw.swen3.persistence.service.messageQueue.MessageQueueService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.annotation.Generated;
+import jakarta.validation.Valid;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +35,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -87,22 +94,60 @@ public class  DocumentsApiController implements DocumentsApi {
     @Override
     public ResponseEntity<GetDocument200Response> getDocument(Integer id, Integer page, Boolean fullPerms) {
         DocumentDTO documentDTO = documentService.findById(id);
+
+        GetDocument200ResponsePermissions permissions = getGetDocument200ResponsePermissions();
+        GetDocument200Response response = getGetDocument200Response(id, documentDTO, permissions);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @NotNull
+    private static GetDocument200Response getGetDocument200Response(Integer id, DocumentDTO documentDTO, GetDocument200ResponsePermissions permissions) {
         GetDocument200Response response = new GetDocument200Response();
         response.setId((int) documentDTO.getId());
         response.setTitle(documentDTO.getTitle());
         response.setContent(documentDTO.getContent());
-        //response.setDocumentType((int) documentDTO.getDocumentType().getMatchingAlgorithm());
-        //response.setCorrespondent((int) documentDTO.getCorrespondent().getDocumentCount());
-        //List<Integer> tags = documentDTO.getDocTags().stream().map(tag -> Math.toIntExact(tag.getMatchingAlgorithm())).toList();
-        //response.setTags(tags);
+        response.setOwner(1);
+        response.setCreatedDate(documentDTO.getCreatedAt().toString());
+        response.setAdded(documentDTO.getAddedAt().toString());
+        response.setPermissions(permissions);
+        response.setOriginalFileName(documentDTO.getTitle());
+        response.setArchiveSerialNumber(id);
+        response.setArchivedFileName(documentDTO.getTitle());
+        response.setModified(documentDTO.getModified().toString());
+        response.setStoragePath(1);
+        response.setCorrespondent(1);
+        response.setDocumentType(1);
+        return response;
+    }
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    @NotNull
+    private static GetDocument200ResponsePermissions getGetDocument200ResponsePermissions() {
+        GetDocument200ResponsePermissions permissions = new GetDocument200ResponsePermissions();
+        permissions.setView(new GetDocument200ResponsePermissionsView());
+        permissions.setChange(new GetDocument200ResponsePermissionsView());
+        permissions.getView().addUsersItem(1);
+        permissions.getView().addUsersItem(2);
+        permissions.getChange().addUsersItem(1);
+        permissions.getChange().addUsersItem(2);
+        permissions.getView().addGroupsItem(1);
+        permissions.getView().addGroupsItem(2);
+        permissions.getChange().addGroupsItem(1);
+        permissions.getChange().addGroupsItem(2);
+        return permissions;
     }
 
     @Override
     public ResponseEntity<GetDocumentMetadata200Response> getDocumentMetadata(Integer id) {
         GetDocumentMetadata200Response documentTypes = new GetDocumentMetadata200Response();
         documentTypes.setLang("GET /api/documents/{id}/metadata");
+        DocumentDTO documentDTO = documentService.findById(id);
+        documentTypes.setOriginalChecksum(documentDTO.getChecksum());
+        documentTypes.setOriginalSize((int) documentDTO.getFilesize());
+        documentTypes.setOriginalMimeType(documentDTO.getMimeType());
+        documentTypes.setOriginalFilename(documentDTO.getOriginalName());
+        documentTypes.setMediaFilename(documentDTO.getTitle());
+
         return new ResponseEntity<>(documentTypes, HttpStatus.OK);
     }
 
@@ -143,6 +188,15 @@ public class  DocumentsApiController implements DocumentsApi {
     public ResponseEntity<UpdateDocument200Response> updateDocument(Integer id, UpdateDocumentRequest updateDocumentRequest) {
         UpdateDocument200Response documentTypes = new UpdateDocument200Response();
         documentTypes.setContent("PUT /api/documents/{id}");
+
+        DocumentDTO documentDTO = documentService.findById(id);
+        documentDTO.setTitle(updateDocumentRequest.getTitle());
+        documentDTO.setContent(updateDocumentRequest.getContent());
+        documentDTO.setCreatedAt(LocalDateTime.parse(updateDocumentRequest.getCreatedDate()));
+        documentDTO.setDocumentType(mapper.toEntity(documentTypeService.findById(Long.valueOf(updateDocumentRequest.getDocumentType()))));
+
+        documentService.saveDocument(mapper.toEntity(documentDTO));
+
         return new ResponseEntity<>(documentTypes, HttpStatus.OK);
     }
 
@@ -193,15 +247,23 @@ public class  DocumentsApiController implements DocumentsApi {
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 
-    private DocumentDTO createDocumentDTO(String title, OffsetDateTime created, Integer documentType, List<Integer> tags, Integer correspondent, List<MultipartFile> document) {
+    private DocumentDTO createDocumentDTO(String title, OffsetDateTime created, Integer documentType, List<Integer> tags, Integer correspondent, List<MultipartFile> document) throws IOException {
         DocumentTypeDTO type = documentTypeService.findById(documentType == null ? null : Long.valueOf(documentType));
         CorrespondentDTO correspondentEntity = correspondentService.findById(correspondent == null ? null : Long.valueOf(correspondent));
         List<DocTagDTO> tagEntities = docTagService.findAllById(tags == null ? null : tags.stream().map(Long::valueOf).collect(Collectors.toList()));
 
         return DocumentDTO.builder()
                 .title(title == null ? document.get(0).getOriginalFilename() : title)
+                .originalName(document.get(0).getOriginalFilename())
+                .owner("admin")
                 .createdAt(created == null ? LocalDateTime.now() : created.toLocalDateTime())
+                .addedAt(LocalDateTime.now())
+                .modified(LocalDateTime.now())
+                .filesize(document.get(0).getSize())
+                .mimeType(document.get(0).getContentType())
+                .checksum(String.valueOf(Arrays.hashCode(document.get(0).getBytes())))
                 .documentType(mapper.toEntity(type))
+                .storagePath("storage")
                 .correspondent(mapper.toEntity(correspondentEntity))
                 .docTags(mapper.toDocTagsEntity(tagEntities))
                 .build();
