@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
 
+import java.time.LocalDateTime;
+
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -54,6 +56,9 @@ class DocumentsApiControllerTest {
         int documentId = 1;
         DocumentDTO mockDocument = new DocumentDTO();
         mockDocument.setId(documentId);
+        mockDocument.setAddedAt(LocalDateTime.now());
+        mockDocument.setCreatedAt(LocalDateTime.now());
+        mockDocument.setModified(LocalDateTime.now());
         mockDocument.setTitle("Sample Document");
         mockDocument.setContent("This is the content of the document.");
         when(documentService.findById(documentId)).thenReturn(mockDocument);
