@@ -10,10 +10,7 @@ import at.fhtw.swen3.persistence.service.dto.DocTagDTO;
 import at.fhtw.swen3.persistence.service.dto.DocumentDTO;
 import at.fhtw.swen3.persistence.service.dto.DocumentTypeDTO;
 import at.fhtw.swen3.persistence.service.messageQueue.MessageQueueService;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.annotation.Generated;
-import jakarta.validation.Valid;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,7 +39,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("${openapi.paperlessRestServer.base-path:}")
 @CrossOrigin(origins = "http://localhost:8080")
-public class  DocumentsApiController implements DocumentsApi {
+public class DocumentsApiController implements DocumentsApi {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentsApiController.class);
     private final NativeWebRequest request;
@@ -104,6 +99,7 @@ public class  DocumentsApiController implements DocumentsApi {
     @NotNull
     private static GetDocument200Response getGetDocument200Response(Integer id, DocumentDTO documentDTO, GetDocument200ResponsePermissions permissions) {
         GetDocument200Response response = new GetDocument200Response();
+
         response.setId((int) documentDTO.getId());
         response.setTitle(documentDTO.getTitle());
         response.setContent(documentDTO.getContent());
@@ -118,12 +114,14 @@ public class  DocumentsApiController implements DocumentsApi {
         response.setStoragePath(1);
         response.setCorrespondent(1);
         response.setDocumentType(1);
+
         return response;
     }
 
     @NotNull
     private static GetDocument200ResponsePermissions getGetDocument200ResponsePermissions() {
         GetDocument200ResponsePermissions permissions = new GetDocument200ResponsePermissions();
+
         permissions.setView(new GetDocument200ResponsePermissionsView());
         permissions.setChange(new GetDocument200ResponsePermissionsView());
         permissions.getView().addUsersItem(1);
@@ -134,12 +132,14 @@ public class  DocumentsApiController implements DocumentsApi {
         permissions.getView().addGroupsItem(2);
         permissions.getChange().addGroupsItem(1);
         permissions.getChange().addGroupsItem(2);
+
         return permissions;
     }
 
     @Override
     public ResponseEntity<GetDocumentMetadata200Response> getDocumentMetadata(Integer id) {
         GetDocumentMetadata200Response documentTypes = new GetDocumentMetadata200Response();
+
         documentTypes.setLang("GET /api/documents/{id}/metadata");
         DocumentDTO documentDTO = documentService.findById(id);
         documentTypes.setOriginalChecksum(documentDTO.getChecksum());
@@ -155,19 +155,21 @@ public class  DocumentsApiController implements DocumentsApi {
     @Override
     public ResponseEntity<GetDocuments200Response> getDocuments(Integer page, Integer pageSize, String query, String ordering, List<Integer> tagsIdAll, Integer documentTypeId, Integer storagePathIdIn, Integer correspondentId, Boolean truncateContent) {
         List<DocumentDTO> documents = null;
+
         if (query == null) {
             documents = documentService.findAll();
-        }
-        else
+        } else
             try {
-            documents = mapper.toDTOs(documentService.searchDocuments(query));
-            } catch (IOException e){
+                documents = mapper.toDTOs(documentService.searchDocuments(query));
+            } catch (IOException e) {
                 LOGGER.error("Error searching for documents! \n");
-        }
+            }
 
         GetDocuments200Response response = new GetDocuments200Response();
         response.setCount(documents.size());
+
         List<GetDocuments200ResponseResultsInner> innerResults = new ArrayList<>();
+
         for (DocumentDTO documentDTO : documents) {
             GetDocuments200ResponseResultsInner inner = new GetDocuments200ResponseResultsInner();
             inner.id((int) documentDTO.getId());
@@ -181,6 +183,7 @@ public class  DocumentsApiController implements DocumentsApi {
             innerResults.add(inner);
         }
         response.setResults(innerResults);
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -196,6 +199,8 @@ public class  DocumentsApiController implements DocumentsApi {
         documentDTO.setDocumentType(mapper.toEntity(documentTypeService.findById(Long.valueOf(updateDocumentRequest.getDocumentType()))));
 
         documentService.saveDocument(mapper.toEntity(documentDTO));
+
+        LOGGER.info("Document updated successfully");
 
         return new ResponseEntity<>(documentTypes, HttpStatus.OK);
     }
@@ -244,6 +249,7 @@ public class  DocumentsApiController implements DocumentsApi {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
         headers.setContentLength(imageBytes.length);
+
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 
@@ -268,7 +274,6 @@ public class  DocumentsApiController implements DocumentsApi {
                 .docTags(mapper.toDocTagsEntity(tagEntities))
                 .build();
     }
-
 
 
 }

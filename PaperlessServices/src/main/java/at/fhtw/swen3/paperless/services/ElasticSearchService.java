@@ -16,35 +16,48 @@ import java.util.Optional;
 
 @Service
 public class ElasticSearchService implements SearchIndexService {
-    private static final Logger log = LoggerFactory.getLogger(ElasticSearchService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchService.class);
     private final ElasticsearchClient esClient;
 
     @Autowired
-    public ElasticSearchService(ElasticsearchClient esClient) throws IOException {
+    public ElasticSearchService(ElasticsearchClient esClient) {
         this.esClient = esClient;
 
-        if (!esClient.indices().exists(
-                i -> i.index(ElasticSearchConfig.DOCUMENTS_INDEX_NAME)
-        ).value()) {
-            esClient.indices().create(c -> c
-                    .index(ElasticSearchConfig.DOCUMENTS_INDEX_NAME)
-            );
+        try {
+            if (!esClient.indices().exists(
+                    i -> i.index(ElasticSearchConfig.DOCUMENTS_INDEX_NAME)
+            ).value()) {
+                esClient.indices().create(c -> c
+                        .index(ElasticSearchConfig.DOCUMENTS_INDEX_NAME)
+                );
+            }
+            LOGGER.info("Created index " + ElasticSearchConfig.DOCUMENTS_INDEX_NAME);
+        } catch (IOException e) {
+            LOGGER.error("Error creating index \n" + e.getMessage());
         }
     }
 
     @Override
-    public Result indexDocument(Document document) throws IOException {
+    public Result indexDocument(Document document) {
         // do indexing with ElasticSearch
-        IndexResponse response = esClient.index(i -> i
-                .index(ElasticSearchConfig.DOCUMENTS_INDEX_NAME)
-                .id(String.valueOf(document.getId()))
-                .document(document)
-        );
+        IndexResponse response = null;
+        try {
+            response = esClient.index(i -> i
+                    .index(ElasticSearchConfig.DOCUMENTS_INDEX_NAME)
+                    .id(String.valueOf(document.getId()))
+                    .document(document)
+            );
+        } catch (IOException e) {
+            LOGGER.error("Error indexing document \n" + e.getMessage());
+        }
+        assert response != null;
+
         String logMsg = "Indexed document " + document.getId() + document.getTitle() + ": result=" + response.result() + ", index=" + response.index();
         if ( response.result()!=Result.Created && response.result()!=Result.Updated )
-            log.error("Failed to " + logMsg);
+            LOGGER.error("Failed to " + logMsg);
         else
-            log.info(logMsg);
+            LOGGER.info(logMsg);
+
         return response.result();
     }
 
@@ -58,7 +71,7 @@ public class ElasticSearchService implements SearchIndexService {
             );
             return (response.found() && response.source()!=null) ? Optional.of(response.source()) : Optional.empty();
         } catch (IOException e) {
-            log.error("Failed to get document id=" + id + " from elasticsearch: " + e);
+            LOGGER.error("Failed to get document id=" + id + " from elasticsearch: " + e);
             return Optional.empty();
         }
     }
