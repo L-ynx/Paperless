@@ -23,20 +23,24 @@ public class SearchIndexServiceImpl implements SearchIndexService {
     private final ElasticsearchClient esClient;
 
     @Autowired
-    public SearchIndexServiceImpl(ElasticsearchClient esClient) throws IOException {
+    public SearchIndexServiceImpl(ElasticsearchClient esClient) {
         this.esClient = esClient;
 
-        if (!esClient.indices().exists(
-                i -> i.index(ElasticSearchConfig.DOCUMENTS_INDEX_NAME)
-        ).value()) {
-            esClient.indices().create(c -> c
-                    .index(ElasticSearchConfig.DOCUMENTS_INDEX_NAME)
-            );
+        try {
+            if (!esClient.indices().exists(
+                    i -> i.index(ElasticSearchConfig.DOCUMENTS_INDEX_NAME)
+            ).value()) {
+                esClient.indices().create(c -> c
+                        .index(ElasticSearchConfig.DOCUMENTS_INDEX_NAME)
+                );
+            }
+        } catch (IOException e) {
+            LOGGER.error("Error creating index \n" + e.getMessage());
         }
     }
 
     @Override
-    public List<Document> searchDocument(String searchString) throws IOException {
+    public List<Document> searchDocument(String searchString) {
         //search document with query
         try {
             SearchResponse<Document> searchResponse = this.esClient.search(s -> s
@@ -49,7 +53,7 @@ public class SearchIndexServiceImpl implements SearchIndexService {
             return searchResponse.hits().hits().stream().map(Hit::source).toList();
         } catch (IOException e) {
             LOGGER.error("Error searching for documents \n" + e.getMessage());
-            throw e;
+            return null;
         }
     }
 

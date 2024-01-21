@@ -111,8 +111,8 @@ public interface DocumentsApi {
             }
     )
     @RequestMapping(
-        method = RequestMethod.DELETE,
-        value = "/api/documents/{id}/"
+            method = RequestMethod.DELETE,
+            value = "/api/documents/{id}/"
     )
 
     default ResponseEntity<Void> deleteDocument(
@@ -140,9 +140,9 @@ public interface DocumentsApi {
             }
     )
     @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/api/documents/{id}/",
-        produces = { "application/json" }
+            method = RequestMethod.GET,
+            value = "/api/documents/{id}/",
+            produces = {"application/json"}
     )
 
     default ResponseEntity<GetDocument200Response> getDocument(
@@ -180,9 +180,9 @@ public interface DocumentsApi {
             }
     )
     @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/api/documents/{id}/metadata/",
-        produces = { "application/json" }
+            method = RequestMethod.GET,
+            value = "/api/documents/{id}/metadata/",
+            produces = {"application/json"}
     )
 
     default ResponseEntity<GetDocumentMetadata200Response> getDocumentMetadata(
@@ -226,9 +226,9 @@ public interface DocumentsApi {
             }
     )
     @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/api/documents/",
-        produces = { "application/json" }
+            method = RequestMethod.GET,
+            value = "/api/documents/",
+            produces = {"application/json"}
     )
 
     default ResponseEntity<GetDocuments200Response> getDocuments(
@@ -273,10 +273,10 @@ public interface DocumentsApi {
             }
     )
     @RequestMapping(
-        method = RequestMethod.PUT,
-        value = "/api/documents/{id}/",
-        produces = { "application/json" },
-        consumes = { "application/json" }
+            method = RequestMethod.PUT,
+            value = "/api/documents/{id}/",
+            produces = {"application/json"},
+            consumes = {"application/json"}
     )
 
     default ResponseEntity<UpdateDocument200Response> updateDocument(
@@ -316,9 +316,9 @@ public interface DocumentsApi {
             }
     )
     @RequestMapping(
-        method = RequestMethod.POST,
-        value = "/api/documents/post_document/",
-        consumes = { "multipart/form-data" }
+            method = RequestMethod.POST,
+            value = "/api/documents/post_document/",
+            consumes = {"multipart/form-data"}
     )
 
     default ResponseEntity<String> uploadDocument(
@@ -336,12 +336,12 @@ public interface DocumentsApi {
     /**
      * GET /api/documents/{id}/thumb
      *
-     * @param id  (required)
+     * @param id (required)
      * @return Success (status code 200)
      */
     @Operation(
             operationId = "getDocumentThumb",
-            tags = { "Documents" },
+            tags = {"Documents"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Success", content = {
                             @Content(mediaType = "image/jpeg", schema = @Schema(implementation = Resource.class)),
@@ -353,7 +353,7 @@ public interface DocumentsApi {
     @RequestMapping(
             method = RequestMethod.GET,
             value = "/api/documents/{id}/thumb/",
-            produces = { "image/jpeg", "image/png", "image/jpg" }
+            produces = {"image/jpeg", "image/png", "image/jpg"}
     )
 
     default ResponseEntity<ByteArrayResource> getDocumentThumb(

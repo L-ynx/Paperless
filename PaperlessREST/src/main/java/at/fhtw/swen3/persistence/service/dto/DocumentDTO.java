@@ -17,10 +17,23 @@ import java.util.List;
 @Component
 public class DocumentDTO {
     private long id;
+    private long filesize;
+
     private String title;
+    private String originalName;
     private String content;
+    private String checksum;
+    private String mimeType;
+    private String storagePath;
+    private String owner;
+
     private LocalDateTime createdAt;
+    private LocalDateTime addedAt;
+    private LocalDateTime modified;
+
     private Correspondent correspondent;
+
     private DocumentType documentType;
+
     private List<DocTag> docTags;
 }

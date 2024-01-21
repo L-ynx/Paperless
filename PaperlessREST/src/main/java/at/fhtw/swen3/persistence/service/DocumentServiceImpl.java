@@ -39,9 +39,14 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public DocumentDTO findById(Integer id) {
-        DocumentDTO result = repository.findById(Long.valueOf(id)).map(mapper::toDTO).orElseThrow(() -> new RuntimeException("Document not found"));
-        LOGGER.info("Document found: {}", result);
-        return result;
+        try {
+            DocumentDTO result = repository.findById(Long.valueOf(id)).map(mapper::toDTO).orElseThrow(() -> new RuntimeException("Document not found"));
+            LOGGER.info("Document found: {}", result.getId());
+            return result;
+        } catch (RuntimeException e) {
+            LOGGER.warn(e.getMessage());
+        }
+        return null;
     }
 
     @Override
@@ -82,10 +87,16 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public List<Document> searchDocuments(String query) throws IOException {
+    public List<Document> searchDocuments(String query) {
         //no need to execute a query against the db, elastic search already contains
         //all the data we need in order to return useful results.
-        return this.searchIndexService.searchDocument(query);
+        try {
+            return searchIndexService.searchDocument(query);
+        } catch (IOException e) {
+            LOGGER.warn(e.getMessage());
+        }
+
+        return null;
     }
 
     @Override
@@ -94,16 +105,12 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public List<Document> handleGetDocuments(String query) throws IOException {
+    public List<Document> handleGetDocuments(String query) {
 
         if (query == null || query.isEmpty()) {
-
             return fetchAllDocuments();
-
         } else {
-
             return searchDocuments(query);
-
         }
 
     }

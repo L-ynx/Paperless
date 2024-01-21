@@ -16,11 +16,20 @@ public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private long filesize;
 
-    private String title;
     @Column(columnDefinition = "TEXT")
     private String content;
+    private String title;
+    private String originalName;
+    private String checksum;
+    private String mimeType;
+    private String storagePath;
+    private String owner;
+
     private LocalDateTime createdAt;
+    private LocalDateTime addedAt;
+    private LocalDateTime modified;
 
     @ManyToOne
     @JoinColumn(name = "correspondent_id")
