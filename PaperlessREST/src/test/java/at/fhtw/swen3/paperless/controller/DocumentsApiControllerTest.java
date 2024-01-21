@@ -1,7 +1,6 @@
 package at.fhtw.swen3.paperless.controller;
 
 import at.fhtw.swen3.paperless.services.dto.GetDocument200Response;
-import at.fhtw.swen3.persistence.entity.Document;
 import at.fhtw.swen3.persistence.mapper.DatabaseMapper;
 import at.fhtw.swen3.persistence.service.*;
 import at.fhtw.swen3.persistence.service.dto.DocumentDTO;
@@ -14,14 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.time.OffsetDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;

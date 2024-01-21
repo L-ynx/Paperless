@@ -3,6 +3,7 @@ package at.fhtw.swen3.paperless.services;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import at.fhtw.swen3.paperless.config.ElasticSearchConfig;
 import at.fhtw.swen3.paperless.entity.Document;
 import at.fhtw.swen3.paperless.misc.RetrievedObject;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
@@ -18,6 +19,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import co.elastic.clients.elasticsearch.core.GetRequest;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -67,6 +69,33 @@ class ElasticSearchServiceTest {
         verify(mockSearchIndexService).indexDocument(any(Document.class));
         // No need to verify mockIndexResponse.result() since it's part of the stubbing
     }
+
+    /*
+    @Test
+    void testIndexDocument() throws IOException {
+        // Arrange
+        long documentId = 1L;
+        Document document = new Document();
+        document.setId(documentId);
+        document.setTitle("Test Document");
+
+        // Mock the behavior of the esClient
+        IndexResponse mockResponse = mock(IndexResponse.class);
+        when(esClient.index(any(IndexRequest.class))).thenReturn(mockResponse);
+        when(mockResponse.result()).thenReturn(Result.Created);
+
+        // Set the expected result for the elasticSearchService.indexDocument method
+        when(elasticSearchService.indexDocument(any(Document.class))).thenReturn(Result.Created);
+
+        // Act
+        Result result = elasticSearchService.indexDocument(document);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(Result.Created, result);
+        verify(esClient).index(any(IndexRequest.class));
+    }
+    */
 
     /*
     @Test
