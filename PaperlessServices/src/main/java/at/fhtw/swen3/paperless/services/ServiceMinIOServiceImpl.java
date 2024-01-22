@@ -16,15 +16,15 @@ import java.nio.file.StandardCopyOption;
 
 @Slf4j
 @Service
-public class MinIOService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MinIOService.class);
+public class ServiceMinIOServiceImpl implements ServiceMinIOService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceMinIOService.class);
     private final MinioClient minioClient;
 
     @Value("${minio.bucket}")
     private String bucketName;
 
     @Autowired
-    public MinIOService(MinioClient minioClient) {
+    public ServiceMinIOServiceImpl(MinioClient minioClient) {
         this.minioClient = minioClient;
     }
 

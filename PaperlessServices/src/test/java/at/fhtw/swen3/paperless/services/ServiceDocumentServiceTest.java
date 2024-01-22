@@ -6,17 +6,18 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import static org.mockito.ArgumentMatchers.eq;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-class DocumentServiceTest {
+class ServiceDocumentServiceTest {
 
     @Mock
     private DocumentRepository documentRepository;
 
     @InjectMocks
-    private DocumentService documentService;
+    private ServiceDocumentServiceImpl documentService;
 
     @BeforeEach
     void setUp() {

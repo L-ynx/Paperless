@@ -5,12 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DocumentService {
-
+public class ServiceDocumentServiceImpl implements ServiceDocumentService {
     private final DocumentRepository documentRepository;
 
     @Autowired
-    public DocumentService(DocumentRepository documentRepository) {
+    public ServiceDocumentServiceImpl(DocumentRepository documentRepository) {
         this.documentRepository = documentRepository;
     }
 

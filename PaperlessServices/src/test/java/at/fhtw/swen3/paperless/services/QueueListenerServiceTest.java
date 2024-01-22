@@ -2,7 +2,6 @@ package at.fhtw.swen3.paperless.services;
 
 import at.fhtw.swen3.paperless.entity.Document;
 import at.fhtw.swen3.paperless.misc.RetrievedObject;
-import at.fhtw.swen3.paperless.services.*;
 import co.elastic.clients.elasticsearch._types.Result;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,26 +10,26 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class QueueListenerServiceTest {
 
     @Mock
-    private MinIOService minIOService;
+    private ServiceMinIOService serviceMinIOService;
     @Mock
     private OcrService ocrService;
     @Mock
     private SearchIndexService searchIndexService;
     @Mock
-    private DocumentService documentService;
+    private ServiceDocumentService serviceDocumentService;
 
     @InjectMocks
-    private QueueListenerService queueListenerService;
+    private QueueListenerServiceImpl queueListenerService;
 
     @BeforeEach
     void setUp() {
@@ -51,9 +50,9 @@ class QueueListenerServiceTest {
         indexedDocument.setContent(extractedText);
         indexedDocument.setTitle(title);
 
-        when(minIOService.retrieveObject(message)).thenReturn(retrievedObject);
+        when(serviceMinIOService.retrieveObject(message)).thenReturn(retrievedObject);
         when(ocrService.executeOCR(any(File.class))).thenReturn(extractedText);
-        when(documentService.updateContent(eq(extractedText), eq(documentId))).thenReturn(title);
+        when(serviceDocumentService.updateContent(eq(extractedText), eq(documentId))).thenReturn(title);
         when(searchIndexService.indexDocument(any(Document.class))).thenReturn(Result.Created);
         when(searchIndexService.getDocumentById(anyInt())).thenReturn(Optional.of(indexedDocument));
 
@@ -61,7 +60,7 @@ class QueueListenerServiceTest {
         queueListenerService.receiveMessage(message);
 
         // Assert
-        verify(minIOService).retrieveObject(message);
+        verify(serviceMinIOService).retrieveObject(message);
     }
 
 }
