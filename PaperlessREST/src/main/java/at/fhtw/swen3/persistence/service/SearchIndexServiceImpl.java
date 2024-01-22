@@ -57,6 +57,24 @@ public class SearchIndexServiceImpl implements SearchIndexService {
         }
     }
 
+    @Override
+    public void updateDocument(Document document) {
+        //update document with ElasticSearch
+        String docId = String.valueOf(document.getId());
+
+        try {
+            esClient.update(u -> u
+                            .index(ElasticSearchConfig.DOCUMENTS_INDEX_NAME)
+                            .id(docId)
+                            .doc(document),
+                    Document.class
+            );
+            LOGGER.info("Updated document id=" + docId + " in elasticsearch");
+        } catch (IOException e) {
+            LOGGER.error("Error updating document \n" + e.getMessage());
+        }
+    }
+
 
     @Override
     public boolean deleteDocumentById(int id) {
@@ -68,11 +86,11 @@ public class SearchIndexServiceImpl implements SearchIndexService {
             LOGGER.warn("Failed to delete document id=" + id + " from elasticsearch: " + e);
         }
 
-        if (result==null)
+        if (result == null)
             return false;
-        if (result.result() != Result.Deleted )
+        if (result.result() != Result.Deleted)
             LOGGER.warn(result.toString());
-        return result.result()==Result.Deleted;
+        return result.result() == Result.Deleted;
     }
 
 }

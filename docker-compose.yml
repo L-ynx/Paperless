@@ -93,6 +93,8 @@ services:
         condition: service_started
       elastic_search:
         condition: service_healthy
+      paperless-rest:
+        condition: service_started
 
   elastic_search:
     image: elasticsearch:8.7.1

@@ -13,6 +13,8 @@ public interface DocumentService {
 
     Document saveDocument(Document document);
 
+    void updateDocument(Document document);
+
     void deleteDocument(Integer id);
 
     byte[] getThumbnail(Integer id);

@@ -72,6 +72,12 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
+    public void updateDocument(Document document) {
+        repository.save(document);
+        searchIndexService.updateDocument(document);
+    }
+
+    @Override
     public byte[] getThumbnail(Integer id) {
         byte[] imageBytes = new byte[0];
         try {

@@ -198,7 +198,7 @@ public class DocumentsApiController implements DocumentsApi {
         documentDTO.setCreatedAt(LocalDateTime.parse(updateDocumentRequest.getCreatedDate()));
         documentDTO.setDocumentType(mapper.toEntity(documentTypeService.findById(Long.valueOf(updateDocumentRequest.getDocumentType()))));
 
-        documentService.saveDocument(mapper.toEntity(documentDTO));
+        documentService.updateDocument(mapper.toEntity(documentDTO));
 
         LOGGER.info("Document updated successfully");
 

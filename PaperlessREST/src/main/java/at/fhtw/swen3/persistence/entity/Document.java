@@ -6,7 +6,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity(name = "PersistenceDocument")
+@Entity(name = "Persistence_Document")
+@Table(name = "document")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository;
 public interface DocumentRepository extends JpaRepository<Document, Long> {
     @Modifying
     @Transactional
-    @Query("update Document d set d.content = ?1 where d.id = ?2")
+    @Query("update Services_Document d set d.content = ?1 where d.id = ?2")
     void updateContent(String content, long id);
 
-    @Query("select d.title from Document d where d.id = ?1")
+    @Query("select d.title from Services_Document d where d.id = ?1")
     String findTitleById(long id);
 }
