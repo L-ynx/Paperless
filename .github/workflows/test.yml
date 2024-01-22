@@ -1,0 +1,34 @@
+name: Integration Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:latest
+        ports:
+          - 8081:8081 
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build Docker Compose
+        run: docker-compose -f ../docker-compose.yml up -d
+
+      - name: Waiting for Services to Start
+        run: docker-compose -f ../docker-compose.yml ps
+
+      - name: Run Integration Tests
+        run: |
+          docker-compose -f ../docker-compose.yml exec IntegrationTests \
+            mvn clean verify -pl IntegrationTests
+
+      - name: Stop Docker Compose
+        run: docker-compose -f ../docker-compose.yml down
