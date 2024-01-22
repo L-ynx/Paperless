@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-@Entity
+@Entity(name = "PersistenceCorrespondent")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -26,8 +26,9 @@ public class DocumentServiceImpl implements DocumentService {
 
     private final RabbitTemplate rabbitTemplate;
     private final DocumentRepository repository;
-    protected final DatabaseMapper mapper;
     private final SearchIndexService searchIndexService;
+
+    protected final DatabaseMapper mapper;
 
     @Autowired
     public DocumentServiceImpl(RabbitTemplate rabbitTemplate, DocumentRepository repository, DatabaseMapper mapper, SearchIndexService searchIndexService) {

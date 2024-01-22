@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-@Entity
+@Entity(name = "PersistenceUserInfo")
 @Getter
 @Setter
 @NoArgsConstructor

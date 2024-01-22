@@ -6,7 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
+@Entity(name = "PersistenceDocument")
 @Getter
 @Setter
 @NoArgsConstructor
