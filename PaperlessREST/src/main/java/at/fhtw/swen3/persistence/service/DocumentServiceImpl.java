@@ -26,8 +26,9 @@ public class DocumentServiceImpl implements DocumentService {
 
     private final RabbitTemplate rabbitTemplate;
     private final DocumentRepository repository;
-    protected final DatabaseMapper mapper;
     private final SearchIndexService searchIndexService;
+
+    protected final DatabaseMapper mapper;
 
     @Autowired
     public DocumentServiceImpl(RabbitTemplate rabbitTemplate, DocumentRepository repository, DatabaseMapper mapper, SearchIndexService searchIndexService) {
@@ -68,6 +69,12 @@ public class DocumentServiceImpl implements DocumentService {
     public void deleteDocument(Integer id) {
         repository.deleteById(Long.valueOf(id));
         searchIndexService.deleteDocumentById(id);
+    }
+
+    @Override
+    public void updateDocument(Document document) {
+        repository.save(document);
+        searchIndexService.updateDocument(document);
     }
 
     @Override

@@ -1,30 +1,25 @@
 package at.fhtw.swen3.paperless.services;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import at.fhtw.swen3.paperless.config.ElasticSearchConfig;
 import at.fhtw.swen3.paperless.entity.Document;
 import at.fhtw.swen3.paperless.misc.RetrievedObject;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch._types.Result;
-import co.elastic.clients.util.ObjectBuilder;
+import co.elastic.clients.elasticsearch.core.GetRequest;
+import co.elastic.clients.elasticsearch.core.GetResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import co.elastic.clients.elasticsearch.core.GetRequest;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
-import java.util.function.Function;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ElasticSearchServiceTest {
@@ -35,20 +30,20 @@ class ElasticSearchServiceTest {
     @Mock
     private ElasticSearchService elasticSearchService;
     @Mock
-    private MinIOService mockMinIOService;
+    private ServiceMinIOService mockServiceMinIOService;
     @Mock
     private OcrService mockOcrService;
     @Mock
     private SearchIndexService mockSearchIndexService;
     @Mock
-    private DocumentService mockDocumentService;
+    private ServiceDocumentService mockDocumentService;
 
-    private QueueListenerService queueListenerService;
+    private QueueListenerServiceImpl queueListenerService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        queueListenerService = new QueueListenerService(mockMinIOService, mockOcrService, mockSearchIndexService, mockDocumentService);
+        queueListenerService = new QueueListenerServiceImpl(mockServiceMinIOService, mockOcrService, mockSearchIndexService, mockDocumentService);
     }
 
     @Test
@@ -56,7 +51,7 @@ class ElasticSearchServiceTest {
         // Arrange
         String message = "testMessage";
         RetrievedObject retrievedObject = new RetrievedObject(Path.of("dummyPath"), "1");
-        when(mockMinIOService.retrieveObject(message)).thenReturn(retrievedObject);
+        when(mockServiceMinIOService.retrieveObject(message)).thenReturn(retrievedObject);
         when(mockOcrService.executeOCR(any())).thenReturn("Extracted Text");
         when(mockDocumentService.updateContent(anyString(), anyLong())).thenReturn("Test Title");
 

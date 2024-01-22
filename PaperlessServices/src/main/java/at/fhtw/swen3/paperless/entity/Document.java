@@ -6,7 +6,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
+@Entity(name = "Services_Document")
+@Table(name = "document")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -1,6 +1,5 @@
 package at.fhtw.swen3.paperless.config;
 
-
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -13,6 +12,7 @@ public class RabbitMQConfig {
 
     @Value("${rabbitmq.host}")
     private String HOST;
+
     public static final String QUEUE = "rabbitQueue";
 
     @Bean

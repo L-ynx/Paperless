@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.util.List;
 
-@Entity
+@Entity(name = "PersistenceDocTag")
 @Getter
 @Setter
 @NoArgsConstructor

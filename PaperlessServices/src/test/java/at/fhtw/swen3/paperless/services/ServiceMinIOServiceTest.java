@@ -1,7 +1,8 @@
 package at.fhtw.swen3.paperless.services;
 
-import at.fhtw.swen3.paperless.misc.RetrievedObject;
-import io.minio.*;
+import io.minio.BucketExistsArgs;
+import io.minio.MakeBucketArgs;
+import io.minio.MinioClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,13 +16,13 @@ import java.lang.reflect.Field;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class MinIOServiceTest {
+class ServiceMinIOServiceTest {
 
     @Mock
     private MinioClient minioClient;
 
     @InjectMocks
-    private MinIOService minIOService;
+    private ServiceMinIOServiceImpl minIOService;
 
     private String validBucketName = "testbucket"; // Lowercase and compliant with AWS S3 standards
 
@@ -29,9 +30,9 @@ class MinIOServiceTest {
     void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
         // No need for ReflectionTestUtils since we are directly setting the field
-        minIOService = new MinIOService(minioClient);
+        minIOService = new ServiceMinIOServiceImpl(minioClient);
         // Set the field directly for the purpose of the test
-        Field bucketNameField = MinIOService.class.getDeclaredField("bucketName");
+        Field bucketNameField = ServiceMinIOServiceImpl.class.getDeclaredField("bucketName");
         bucketNameField.setAccessible(true);
         bucketNameField.set(minIOService, validBucketName);
 

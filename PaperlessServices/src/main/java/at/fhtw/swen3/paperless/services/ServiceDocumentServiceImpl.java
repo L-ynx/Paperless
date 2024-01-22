@@ -1,13 +1,15 @@
 package at.fhtw.swen3.paperless.services;
 
 import at.fhtw.swen3.paperless.repository.DocumentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DocumentService {
+public class ServiceDocumentServiceImpl implements ServiceDocumentService {
     private final DocumentRepository documentRepository;
 
-    public DocumentService(DocumentRepository documentRepository) {
+    @Autowired
+    public ServiceDocumentServiceImpl(DocumentRepository documentRepository) {
         this.documentRepository = documentRepository;
     }
 

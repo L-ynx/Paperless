@@ -198,7 +198,7 @@ public class DocumentsApiController implements DocumentsApi {
         documentDTO.setCreatedAt(LocalDateTime.parse(updateDocumentRequest.getCreatedDate()));
         documentDTO.setDocumentType(mapper.toEntity(documentTypeService.findById(Long.valueOf(updateDocumentRequest.getDocumentType()))));
 
-        documentService.saveDocument(mapper.toEntity(documentDTO));
+        documentService.updateDocument(mapper.toEntity(documentDTO));
 
         LOGGER.info("Document updated successfully");
 
@@ -219,11 +219,11 @@ public class DocumentsApiController implements DocumentsApi {
 
         try {
             savedDocument = mapper.toDTO(documentService.saveDocument(mapper.toEntity(documentDTO)));
-
-            for (MultipartFile multipartFile : document) {
-                minIOService.saveObject(multipartFile, String.valueOf(savedDocument.getId()));
-                messageQueueService.processMessage(multipartFile.getOriginalFilename());
-            }
+            if (document != null)
+                for (MultipartFile multipartFile : document) {
+                    minIOService.saveObject(multipartFile, String.valueOf(savedDocument.getId()));
+                    messageQueueService.processMessage(multipartFile.getOriginalFilename());
+                }
 
             LOGGER.info("Document uploaded successfully");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -255,15 +255,15 @@ public class DocumentsApiController implements DocumentsApi {
         List<DocTagDTO> tagEntities = docTagService.findAllById(tags == null ? null : tags.stream().map(Long::valueOf).collect(Collectors.toList()));
 
         return DocumentDTO.builder()
-                .title(title == null ? document.get(0).getOriginalFilename() : title)
-                .originalName(document.get(0).getOriginalFilename())
+                .title(title == null && document != null ? document.get(0).getOriginalFilename() : title)
+                .originalName(document != null ? document.get(0).getOriginalFilename() : null)
                 .owner("admin")
                 .createdAt(created == null ? LocalDateTime.now() : created.toLocalDateTime())
                 .addedAt(LocalDateTime.now())
                 .modified(LocalDateTime.now())
-                .filesize(document.get(0).getSize())
-                .mimeType(document.get(0).getContentType())
-                .checksum(String.valueOf(Arrays.hashCode(document.get(0).getBytes())))
+                .filesize(document != null ? document.get(0).getSize() : 0)
+                .mimeType(document != null ? document.get(0).getContentType() : null)
+                .checksum(String.valueOf(Arrays.hashCode(document != null ? document.get(0).getBytes() : null)))
                 .documentType(mapper.toEntity(type))
                 .storagePath("storage")
                 .correspondent(mapper.toEntity(correspondentEntity))

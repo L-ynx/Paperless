@@ -43,8 +43,8 @@
       "tags": "administrator"
     },
     {
-      "name": "tester",
-      "password": "tester",
+      "name": "guest",
+      "password": "guest",
       "tags": "administrator"
     }
   ],
@@ -57,7 +57,7 @@
       "read": ".*"
     },
     {
-      "user": "tester",
+      "user": "guest",
       "vhost": "/",
       "exchange": "rabbitExchange",
       "write": ".*",
@@ -73,7 +73,7 @@
         "read": ".*"
         },
         {
-        "user": "tester",
+        "user": "guest",
         "vhost": "/",
         "configure": ".*",
         "write": ".*",

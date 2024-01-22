@@ -1,6 +1,6 @@
 package at.fhtw.swen3.persistence.service.messageQueue;
 
-import at.fhtw.swen3.paperless.config.SpringDocConfiguration;
+import at.fhtw.swen3.paperless.config.RabbitMQConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +13,7 @@ import org.springframework.stereotype.Service;
 public class MessageQueueServiceImpl implements MessageQueueService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageQueueServiceImpl.class);
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private final RabbitTemplate rabbitTemplate;
 
     @Autowired
     public MessageQueueServiceImpl(RabbitTemplate rabbitTemplate) {
@@ -23,7 +22,7 @@ public class MessageQueueServiceImpl implements MessageQueueService {
 
     @Override
     public void processMessage(String message) {
-        rabbitTemplate.convertAndSend(SpringDocConfiguration.QUEUE, message);
+        rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE, message);
         
         LOGGER.info("Message sent: {}", message);
     }
