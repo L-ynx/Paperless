@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,14 +19,26 @@ public class DocumentRepositoryTest {
     @Autowired
     private DocumentRepository documentRepository;
 
+    // Hilfsmethode zum Erstellen eines vollständigen Document-Objekts
+    private Document createCompleteDocument() {
+        return Document.builder()
+                .title("Test Document")
+                .content("Lorem ipsum")
+                .filesize(12345)
+                .originalName("original.txt")
+                .checksum("abc123")
+                .mimeType("text/plain")
+                .storagePath("/path/to/document")
+                .owner("user1")
+                .createdAt(LocalDateTime.now())
+                .docTags(Collections.emptyList()) // Falls benötigt
+                .build();
+    }
+
     @Test
     public void testFindAll() {
         // Arrange
-        Document document = Document.builder()
-                .title("Test Document")
-                .content("Lorem ipsum")
-                .build();
-
+        Document document = createCompleteDocument();
         documentRepository.save(document);
 
         // Act
@@ -37,30 +51,27 @@ public class DocumentRepositoryTest {
 
     @Test
     public void testSave() {
-        Document document = Document.builder()
-                .title("Test Document")
-                .content("Lorem ipsum")
-                .build();
+        // Arrange
+        Document document = createCompleteDocument();
 
+        // Act
         Document savedDocument = documentRepository.save(document);
 
+        // Assert
         assertEquals("Test Document", savedDocument.getTitle());
     }
 
     @Test
     public void testFindByID() {
-        Document document = Document.builder()
-                .title("Test Document")
-                .content("Lorem ipsum")
-                .build();
-
+        // Arrange
+        Document document = createCompleteDocument();
         Document savedDocument = documentRepository.save(document);
 
-        Document foundDocument = documentRepository.findById(savedDocument.getId()).orElseThrow(() -> new RuntimeException("Document not found"));
+        // Act
+        Document foundDocument = documentRepository.findById(savedDocument.getId())
+                .orElseThrow(() -> new RuntimeException("Document not found"));
 
+        // Assert
         assertEquals("Test Document", foundDocument.getTitle());
     }
-
-
 }
-
