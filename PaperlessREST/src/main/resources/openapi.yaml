@@ -702,6 +702,38 @@ paths:
       x-accepts: application/json
       x-tags:
         - tag: Documents
+  /api/documents/{id}/download/:
+    get:
+      operationId: DownloadDocument
+      parameters:
+        - explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            format: int32
+            type: integer
+          style: simple
+        - explode: true
+          in: query
+          name: original
+          required: false
+          schema:
+            type: boolean
+          style: form
+      responses:
+        "200":
+          content:
+            application/pdf:
+              schema:
+                format: binary
+                type: string
+          description: Success
+      tags:
+        - Documents
+      x-accepts: application/pdf
+      x-tags:
+        - tag: Documents
   /api/documents/{id}/thumb/:
       get:
         operationId: GetDocumentThumb

@@ -129,13 +129,11 @@ public class PaperlessIT {
     @Test
     @Order(5)
     public void deleteDocument() throws Exception {
-        // Delete the document
         this.mockMvc.perform(
                         MockMvcRequestBuilders.delete("/api/documents/1/")
                 )
                 .andExpect(status().is2xxSuccessful());
 
-        // Verify that the document has been deleted
         Optional<Document> deletedDocumentOpt = documentRepository.findById(1L);
         assertFalse(deletedDocumentOpt.isPresent());
     }

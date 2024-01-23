@@ -334,6 +334,34 @@ public interface DocumentsApi {
     }
 
     /**
+     * GET /api/documents/{id}/download
+     *
+     * @param id       (required)
+     * @param original (optional)
+     * @return Success (status code 200)
+     */
+    @Operation(
+            operationId = "downloadDocument",
+            tags = {"Documents"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Success", content = {
+                            @Content(mediaType = "application/pdf", schema = @Schema(implementation = org.springframework.core.io.Resource.class))
+                    })
+            }
+    )
+    @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/api/documents/{id}/download/",
+            produces = {"application/pdf"}
+    )
+    default ResponseEntity<Resource> downloadDocument(
+            @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id,
+            @Parameter(name = "original", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "original", required = false) Boolean original
+    ) {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
      * GET /api/documents/{id}/thumb
      *
      * @param id (required)

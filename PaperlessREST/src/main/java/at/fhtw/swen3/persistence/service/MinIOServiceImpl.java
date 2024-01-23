@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -84,4 +86,26 @@ public class MinIOServiceImpl implements MinIOService {
         }
     }
 
+    @Override
+    public Resource getObject(String id) {
+        Iterable<Result<Item>> results = minioClient.listObjects(
+                ListObjectsArgs.builder().bucket(bucketName).includeUserMetadata(true).build());
+
+        for (io.minio.Result<io.minio.messages.Item> result : results) {
+            try {
+                if (result.get().userMetadata().get("X-Amz-Meta-Id").equals(id)) {
+                    // Get Object
+                    GetObjectArgs args = GetObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(result.get().objectName())
+                            .build();
+
+                    return new ByteArrayResource(minioClient.getObject(args).readAllBytes());
+                }
+            } catch (Exception e) {
+                LOGGER.warn("Object could not be retrieved.");
+            }
+        }
+        return null;
+    }
 }
